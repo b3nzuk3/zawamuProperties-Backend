@@ -1,0 +1,11 @@
+{
+  "name": "estate-pro-server",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Backend API for Zawamu Properties",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js"
+  }
+}
