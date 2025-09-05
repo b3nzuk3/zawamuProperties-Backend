@@ -10,18 +10,24 @@ const router = express.Router()
 const storage = multer.memoryStorage()
 const upload = multer({ storage })
 
-// Configure Cloudinary with env vars
-const cloudinary = configureCloudinary({
+// Configure Cloudinary with env vars (do not log secrets)
+const cloudinaryConfig = {
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET,
-})
+}
 
-console.log('Upload route ENV:', {
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-})
+if (
+  !cloudinaryConfig.cloud_name ||
+  !cloudinaryConfig.api_key ||
+  !cloudinaryConfig.api_secret
+) {
+  console.warn(
+    'Cloudinary environment variables are missing. File uploads will fail until configured.'
+  )
+}
+
+const cloudinary = configureCloudinary(cloudinaryConfig)
 
 // Helper to upload a buffer to Cloudinary
 const streamUpload = (buffer) => {

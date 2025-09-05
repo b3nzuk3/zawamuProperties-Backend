@@ -11,6 +11,7 @@ import contactRoutes from './routes/contact.js'
 import adminRoutes from './routes/admin.js'
 import analyticsRoutes from './routes/analytics.js'
 import uploadRoutes from './routes/upload.js'
+import viewingRoutes from './routes/viewing.js'
 
 const app = express()
 const PORT = process.env.PORT || 5000
@@ -32,6 +33,7 @@ app.use('/api/contact', contactRoutes)
 app.use('/api/admin', adminRoutes)
 app.use('/api/analytics', analyticsRoutes)
 app.use('/api/upload', uploadRoutes)
+app.use('/api/viewing-requests', viewingRoutes)
 
 // Connect to MongoDB
 mongoose
