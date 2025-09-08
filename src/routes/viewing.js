@@ -6,7 +6,7 @@ import {
   updateViewingRequestStatus,
   deleteViewingRequest,
 } from '../controllers/viewingController.js'
-import { authenticateToken } from '../middleware/authMiddleware.js'
+import authMiddleware from '../middleware/authMiddleware.js'
 
 const router = express.Router()
 
@@ -14,9 +14,9 @@ const router = express.Router()
 router.post('/', createViewingRequest)
 
 // Admin routes - require authentication
-router.get('/', authenticateToken, getAllViewingRequests)
-router.get('/:id', authenticateToken, getViewingRequestById)
-router.put('/:id', authenticateToken, updateViewingRequestStatus)
-router.delete('/:id', authenticateToken, deleteViewingRequest)
+router.get('/', authMiddleware, getAllViewingRequests)
+router.get('/:id', authMiddleware, getViewingRequestById)
+router.put('/:id', authMiddleware, updateViewingRequestStatus)
+router.delete('/:id', authMiddleware, deleteViewingRequest)
 
 export default router
