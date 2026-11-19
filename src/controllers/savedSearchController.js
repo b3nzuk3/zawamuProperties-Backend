@@ -1,6 +1,15 @@
 import SavedSearch from '../models/SavedSearch.js'
 import Property from '../models/Property.js'
 import { sendPropertyAlerts } from '../utils/emailService.js'
+import { serializeProperty } from '../utils/propertyRules.js'
+import { validateSavedSearchCriteria } from '../utils/savedSearchRules.js'
+
+function parsePositiveInteger(value, fallback, maximum) {
+  if (value === undefined) return fallback
+  if (typeof value !== 'string' || !/^\d+$/.test(value)) return null
+  const parsed = Number(value)
+  return Number.isSafeInteger(parsed) && parsed > 0 && parsed <= maximum ? parsed : null
+}
 
 // Create a new saved search
 const createSavedSearch = async (req, res) => {
@@ -24,6 +33,13 @@ const createSavedSearch = async (req, res) => {
       })
     }
 
+    let validatedCriteria
+    try {
+      validatedCriteria = validateSavedSearchCriteria(searchCriteria)
+    } catch (error) {
+      return res.status(400).json({ success: false, message: error.message })
+    }
+
     // Check if user already has a saved search with the same name
     const existingSearch = await SavedSearch.findOne({
       userEmail: userEmail.toLowerCase(),
@@ -43,7 +59,7 @@ const createSavedSearch = async (req, res) => {
       userEmail: userEmail.toLowerCase(),
       userName: userName.trim(),
       userPhone: userPhone?.trim(),
-      searchCriteria,
+      searchCriteria: validatedCriteria,
       alertSettings: alertSettings || {
         isActive: true,
         frequency: 'daily',
@@ -133,7 +149,24 @@ const getSavedSearch = async (req, res) => {
 const updateSavedSearch = async (req, res) => {
   try {
     const { id } = req.params
-    const updates = req.body
+    if (!req.body || typeof req.body !== 'object' || Array.isArray(req.body)) {
+      return res.status(400).json({ success: false, message: 'Update body must be an object' })
+    }
+    const updates = { ...req.body }
+
+    // Criteria must enter through the complete validated object, not Mongo operators
+    // or dotted paths that bypass cross-field validation.
+    if (Object.keys(updates).some(key => key.startsWith('$') || key.includes('.'))) {
+      return res.status(400).json({ success: false, message: 'Use plain update fields and a complete searchCriteria object' })
+    }
+
+    if (Object.hasOwn(updates, 'searchCriteria')) {
+      try {
+        updates.searchCriteria = validateSavedSearchCriteria(updates.searchCriteria)
+      } catch (error) {
+        return res.status(400).json({ success: false, message: error.message })
+      }
+    }
 
     // Remove fields that shouldn't be updated directly
     delete updates._id
@@ -207,7 +240,11 @@ const deleteSavedSearch = async (req, res) => {
 const getMatchingProperties = async (req, res) => {
   try {
     const { id } = req.params
-    const { limit = 10, page = 1 } = req.query
+    const limit = parsePositiveInteger(req.query.limit, 10, 100)
+    const page = parsePositiveInteger(req.query.page, 1, 1_000_000)
+    if (limit === null || page === null) {
+      return res.status(400).json({ success: false, message: 'page and limit must be positive integers' })
+    }
 
     const savedSearch = await SavedSearch.findById(id)
 
@@ -218,76 +255,26 @@ const getMatchingProperties = async (req, res) => {
       })
     }
 
-    // Build query based on search criteria
-    const query = { isActive: true }
-    const criteria = savedSearch.searchCriteria
-
-    // Location filters
-    if (criteria.county) {
-      query.county = new RegExp(criteria.county, 'i')
-    }
-    if (criteria.constituency) {
-      query.constituency = new RegExp(criteria.constituency, 'i')
-    }
-    if (criteria.ward) {
-      query.ward = new RegExp(criteria.ward, 'i')
-    }
-
-    // Property type filter
-    if (criteria.propertyTypes && criteria.propertyTypes.length > 0) {
-      query.type = { $in: criteria.propertyTypes }
-    }
-
-    // Price range filter
-    if (criteria.minPrice || criteria.maxPrice) {
-      query.price = {}
-      if (criteria.minPrice) query.price.$gte = criteria.minPrice
-      if (criteria.maxPrice) query.price.$lte = criteria.maxPrice
-    }
-
-    // Bedroom count filter
-    if (criteria.minBedrooms || criteria.maxBedrooms) {
-      query.bedrooms = {}
-      if (criteria.minBedrooms) query.bedrooms.$gte = criteria.minBedrooms
-      if (criteria.maxBedrooms) query.bedrooms.$lte = criteria.maxBedrooms
-    }
-
-    // Bathroom count filter
-    if (criteria.minBathrooms || criteria.maxBathrooms) {
-      query.bathrooms = {}
-      if (criteria.minBathrooms) query.bathrooms.$gte = criteria.minBathrooms
-      if (criteria.maxBathrooms) query.bathrooms.$lte = criteria.maxBathrooms
-    }
-
-    // Search term filter
-    if (criteria.searchTerm) {
-      const searchRegex = new RegExp(criteria.searchTerm, 'i')
-      query.$or = [
-        { title: searchRegex },
-        { description: searchRegex },
-        { location: searchRegex },
-      ]
-    }
-
-    // Execute query with pagination
-    const skip = (parseInt(page) - 1) * parseInt(limit)
-    const properties = await Property.find(query)
-      .sort({ createdAt: -1 })
-      .skip(skip)
-      .limit(parseInt(limit))
-
-    const total = await Property.countDocuments(query)
+    // Property has no isActive field. Use a broad candidate query, then the same
+    // semantic predicate as SavedSearch.matchesProperty before paginating.
+    const candidates = await Property.find({}).sort({ createdAt: -1, _id: -1 })
+    const matchingProperties = candidates.filter(property => savedSearch.matchesProperty(property))
+    const skip = (page - 1) * limit
+    const properties = matchingProperties
+      .slice(skip, skip + limit)
+      .map(property => serializeProperty(property))
+    const total = matchingProperties.length
 
     res.json({
       success: true,
       data: {
         properties,
         pagination: {
-          currentPage: parseInt(page),
-          totalPages: Math.ceil(total / parseInt(limit)),
+          currentPage: page,
+          totalPages: Math.ceil(total / limit),
           totalProperties: total,
           hasNextPage: skip + properties.length < total,
-          hasPrevPage: parseInt(page) > 1,
+          hasPrevPage: page > 1,
         },
       },
     })
@@ -304,20 +291,29 @@ const getMatchingProperties = async (req, res) => {
 // Check for new properties matching saved searches (for alert system)
 const checkForNewMatches = async (req, res) => {
   try {
-    const { hoursBack = 24 } = req.query
+    const hoursBackValue = req.query.hoursBack
+    const hoursBack = hoursBackValue === undefined
+      ? 24
+      : typeof hoursBackValue === 'string' && /^\d+(?:\.\d+)?$/.test(hoursBackValue)
+        ? Number(hoursBackValue)
+        : NaN
+    if (!Number.isFinite(hoursBack) || hoursBack < 0 || hoursBack > 720) {
+      return res.status(400).json({ success: false, message: 'hoursBack must be between 0 and 720' })
+    }
 
-    // Get properties created in the last X hours
+    // Alert recipients must never be notified about unavailable or unknown listings.
+    // Missing legacy availability is read as available by serializeProperty.
     const cutoffDate = new Date(Date.now() - hoursBack * 60 * 60 * 1000)
-    const newProperties = await Property.find({
-      isActive: true,
-      createdAt: { $gte: cutoffDate },
-    })
+    const recentProperties = await Property.find({ createdAt: { $gte: cutoffDate } })
+    const newProperties = recentProperties.filter(property =>
+      serializeProperty(property)?.availability === 'available'
+    )
 
     if (newProperties.length === 0) {
       return res.json({
         success: true,
-        message: 'No new properties found',
-        data: { matches: [], totalMatches: 0 },
+        message: 'No new available properties found',
+        data: { matches: [], totalMatches: 0, newPropertiesCount: 0 },
       })
     }
 
@@ -333,8 +329,9 @@ const checkForNewMatches = async (req, res) => {
       // Reset daily alert count if needed
       search.resetDailyAlerts()
 
-      // Check if we can send more alerts today
-      if (search.alertsSentToday >= search.alertSettings.maxAlertsPerDay) {
+      const alertsSentToday = Number.isFinite(search.alertsSentToday) ? search.alertsSentToday : 0
+      const maxAlertsPerDay = search.alertSettings?.maxAlertsPerDay ?? 5
+      if (alertsSentToday >= maxAlertsPerDay) {
         continue
       }
 

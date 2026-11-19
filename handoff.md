@@ -1,4 +1,14 @@
-# Backend Handoff — Phase E
+# Backend Handoff — Phase F
+
+## Completed Phase F local checkpoint — STOP
+
+Phase F is complete in the local commit containing this handoff on `master`, following E `149b87f`. Saved-search API/model/alert predicates now align purpose, free-text location, canonical/unambiguous legacy types and effective prices while preserving structured criteria. Unsupported criteria fail closed; unavailable listings remain browseable but do not generate availability alerts. Alert HTML and trusted links are hardened; monthly discounted prices include base/offer context. No migration, backfill or catalog seeding was added.
+
+Final isolated lockfile install and backend suite:105passed,0failed/skipped; entrypoint/changed-JS syntax passed. Frontend162tests/24files and production build passed. Recorded final cross-phase production Chromium/Express/disposable Mongo acceptance:410check executions across C–F, with controlled mail/font/rate/API-failure fixtures explicitly identified. All owned databases/containers/listeners were cleaned and absence read back. Current source/test/config hashes match the executed aggregate snapshot. Independent spec and quality reviews approved; see `docs/phase-f-acceptance.md` for exact commands, review provenance, results and limitations.
+
+Frontend typecheck retains1inherited county_coordinates diagnostic; full lint14errors11warnings, changed-file lint2inherited modal any errors/1manager warning. Lockfiles unchanged; install advisory entries backend15/frontend48 are not a production-only security audit or remediation. Public legacy saved-search ownership/privacy, scan scale and alert scheduling/duplicate-delivery risks remain documented launch gates.
+
+STOP after both scoped local commits. Nothing pushed/deployed; no production writes or real messages. Recipient remains TBD; approved SMTP/sender/recipient, owner allowlist, trusted origins, proxy/shared abuse controls and separately authorized real-provider delivery remain required. Root plan/handoff are local-only; this repository's handoff and acceptance document are versioned. Historical status below is superseded.
 
 ## Current accepted Phase E checkpoint (supersedes all history below)
 

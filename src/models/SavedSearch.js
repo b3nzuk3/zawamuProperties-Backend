@@ -1,4 +1,5 @@
 import mongoose from 'mongoose'
+import { matchesSavedSearchProperty, SAVED_SEARCH_PROPERTY_TYPES } from '../utils/savedSearchRules.js'
 
 const savedSearchSchema = new mongoose.Schema(
   {
@@ -22,6 +23,10 @@ const savedSearchSchema = new mongoose.Schema(
     // Search criteria
     searchCriteria: {
       // Location filters
+      location: {
+        type: String,
+        trim: true,
+      },
       county: {
         type: String,
         trim: true,
@@ -36,10 +41,14 @@ const savedSearchSchema = new mongoose.Schema(
       },
 
       // Property filters
+      listingPurpose: {
+        type: String,
+        enum: ['sale', 'rent'],
+      },
       propertyTypes: [
         {
           type: String,
-          enum: ['apartment', 'house', 'land', 'commercial', 'office'],
+          enum: SAVED_SEARCH_PROPERTY_TYPES,
         },
       ],
 
@@ -153,78 +162,7 @@ savedSearchSchema.index({
 
 // Method to check if search matches a property
 savedSearchSchema.methods.matchesProperty = function (property) {
-  const criteria = this.searchCriteria
-
-  // Check location match
-  if (
-    criteria.county &&
-    property.county &&
-    criteria.county.toLowerCase() !== property.county.toLowerCase()
-  ) {
-    return false
-  }
-
-  if (
-    criteria.constituency &&
-    property.constituency &&
-    criteria.constituency.toLowerCase() !== property.constituency.toLowerCase()
-  ) {
-    return false
-  }
-
-  if (
-    criteria.ward &&
-    property.ward &&
-    criteria.ward.toLowerCase() !== property.ward.toLowerCase()
-  ) {
-    return false
-  }
-
-  // Check property type match
-  if (criteria.propertyTypes && criteria.propertyTypes.length > 0) {
-    if (!criteria.propertyTypes.includes(property.type)) {
-      return false
-    }
-  }
-
-  // Check price range match
-  if (criteria.minPrice && property.price < criteria.minPrice) {
-    return false
-  }
-
-  if (criteria.maxPrice && property.price > criteria.maxPrice) {
-    return false
-  }
-
-  // Check bedroom count match
-  if (criteria.minBedrooms && property.bedrooms < criteria.minBedrooms) {
-    return false
-  }
-
-  if (criteria.maxBedrooms && property.bedrooms > criteria.maxBedrooms) {
-    return false
-  }
-
-  // Check bathroom count match
-  if (criteria.minBathrooms && property.bathrooms < criteria.minBathrooms) {
-    return false
-  }
-
-  if (criteria.maxBathrooms && property.bathrooms > criteria.maxBathrooms) {
-    return false
-  }
-
-  // Check search term match
-  if (criteria.searchTerm) {
-    const searchLower = criteria.searchTerm.toLowerCase()
-    const propertyText =
-      `${property.title} ${property.description} ${property.location}`.toLowerCase()
-    if (!propertyText.includes(searchLower)) {
-      return false
-    }
-  }
-
-  return true
+  return matchesSavedSearchProperty(this.searchCriteria, property)
 }
 
 // Method to reset daily alert count
