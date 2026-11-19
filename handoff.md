@@ -1,4 +1,17 @@
-# Backend Handoff — Phase A
+# Backend Handoff — Phase B
+
+## Current checkpoint
+Phase B complete, verified and independently approved: specification PASS (`deleg_5405a0b6`), quality APPROVED (`deleg_f1e31537`), concurrency fix re-review APPROVED (`deleg_de2b2645`, independently reran65/65 tests). Branch `master`, previous checkpoint `d04522b`; the commit containing this handoff is the Phase B checkpoint (`git log -1 --oneline`). STOP before Phase C and wait for explicit approval. User removed migration: no migration scripts, backfill or feature-catalog seeding. No push, deployment, production data changes or real messages authorized.
+
+Property rules/schema/API now enforce sale/rent types, compatible availability, positive finite price and bounded decimal offer, derived decimal half-up effectivePrice, strict writable fields and merged partial validation. Optimistic concurrency rejects stale saves with 409. Legacy raw reads project defaults/location fallback without writes; explicit edits retain structured fields and image/feature snapshots. Feature catalog has public reads and persisted-owner creation, unique normalized keys and race recovery. No frontend changes or later phases started.
+
+Fresh evidence: baseline36 tests; final backend `npm test`65 passed,0 failures/skips; syntax12 changed JavaScript files PASS; whitespace PASS. Tests use identified storage mocks. Separate parent scratch acceptance exercised real HTTP/MongoDB8.0:21 checks PASS before cleanup, including eight parallel duplicate feature creates, DB read-back, legacy GET unchanged/edit preservation and stale VersionError. Dedicated tmpfs DB dropped/read back empty, HTTP closed/disconnected, owned containers removed and absence checked. No build/typecheck/ESLint scripts exist in backend; syntax is not their equivalent. Final full cross-phase acceptance remains deferred. See `docs/phase-b-acceptance.md`.
+
+Remaining: Phase C forms, D public display/viewing/WhatsApp, E enquiries/mail/inbox, F saved searches/final acceptance; all require approval. Existing saved-search privacy gaps, SMTP defects/recipient TBD, dependency advisories and frontend baseline debt remain. Unknown historical types stay readable but need correction when edited. No automatic catalog import; uniqueness requires the declared Mongo index (exercised on disposable DB). Not production launch approval.
+
+Quality `deleg_f1e31537` APPROVED. Its conditional versionless-record concurrency edge was fixed with an explicit missing-__v predicate; final real HTTP/Mongo check now24 checks PASS, including synchronized competing versionless edits returning200/409 and persisted compatible state/version1. Targeted follow-up review `deleg_de2b2645` APPROVED after checking generated Mongo filter/update. **Pre-deploy Phase C gate:** existing frontend editor spreads the whole response into PUT; it must switch to editable-only payloads before deployment. No backend-only deployment compatibility is claimed.
+
+## Historical Phase A handoff (superseded status/authorization below)
 
 ## Status
 Phase A scoped checkpoint complete and independently approved. Branch `master`, baseline `1a76a79`; the commit containing this handoff is the checkpoint (`git log -1 --oneline`). **STOP: wait for explicit Phase B approval.**

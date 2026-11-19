@@ -9,6 +9,7 @@ import analyticsRoutes from './routes/analytics.js'
 import uploadRoutes from './routes/upload.js'
 import viewingRoutes from './routes/viewing.js'
 import savedSearchesRoutes from './routes/savedSearches.js'
+import featuresRoutes from './routes/features.js'
 
 const app = express()
 
@@ -31,5 +32,6 @@ app.use('/api/analytics', analyticsRoutes)
 app.use('/api/upload', uploadRoutes)
 app.use('/api/viewing-requests', viewingRoutes)
 app.use('/api/saved-searches', savedSearchesRoutes)
+app.use('/api/features', featuresRoutes)
 
 export default app

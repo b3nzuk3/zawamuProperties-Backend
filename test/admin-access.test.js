@@ -24,6 +24,20 @@ async function setup(t) {
   process.env.ADMIN_EMAILS = ' other@example.test, OWNER@Example.Test , , '
   t.after(() => { for (const [key,value] of Object.entries(previous)) value === undefined ? delete process.env[key] : process.env[key] = value })
   let actor = { _id:'actor', name:'Actor', email:'ordinary@example.test', password:'private', internal:'never expose' }
+  const propertyFixture = {
+    _id: '64b000000000000000000003',
+    title: 'Test home',
+    description: 'A valid mocked property fixture',
+    price: 100000,
+    location: 'Nairobi',
+    type: 'Apartment',
+    bedrooms: 2,
+    bathrooms: 1,
+    area: 800,
+    featured: false,
+    images: [],
+    features: ['Pool'],
+  }
   stub(t, User, 'findById', id => {
     assert.equal(id, 'actor')
     if (actor instanceof Error) throw actor
@@ -37,6 +51,8 @@ async function setup(t) {
     stub(t, model, 'findByIdAndUpdate', async () => ({_id:'item'}))
     stub(t, model, 'findByIdAndDelete', async () => ({_id:'item'}))
   }
+  stub(t, Property, 'findById', () => query(propertyFixture))
+  stub(t, Property.prototype, 'save', async function () { return this })
   const { default: app } = await import('../src/app.js')
   const api = await serve(app)
   t.after(api.close)
@@ -51,7 +67,12 @@ test('every owner endpoint rejects anonymous and ordinary identities, and permit
       assert.equal((await api.request(method,path)).status,401)
       assert.equal((await api.request(method,path,api.token({isAdmin:true,email:'owner@example.test'}))).status,403)
       api.actor({_id:'actor',email:' owner@example.test '})
-      assert.equal((await api.request(method,path,api.token({}))).status,success)
+      const body = method === 'POST' && path === '/api/properties'
+        ? { title: 'Owner listing', description: 'A valid test fixture', price: 100000, location: 'Nairobi', type: 'Apartment' }
+        : method === 'PUT' && path === '/api/properties/item'
+          ? { description: 'Updated test fixture' }
+          : {}
+      assert.equal((await api.request(method,path,api.token({}),body)).status,success)
     })
   }
 })
