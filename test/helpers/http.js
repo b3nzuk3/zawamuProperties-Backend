@@ -6,6 +6,7 @@ export async function serve(app) {
   server.listen(0, '127.0.0.1')
   await once(server, 'listening')
   return {
+    server,
     async request(method, path, token, body = {}, contentType = 'application/json') {
       const response = await fetch(`http://127.0.0.1:${server.address().port}${path}`, {
         method,

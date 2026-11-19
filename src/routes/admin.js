@@ -21,23 +21,25 @@ router.get('/stats', async (req, res) => {
     const now = new Date()
     const last30Start = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000)
     const prev30Start = new Date(now.getTime() - 60 * 24 * 60 * 60 * 1000)
+    // Missing legacy availability is Available; null/unknown values fail closed.
+    const available = { $or: [{ availability: 'available' }, { availability: { $exists: false } }] }
 
     const [
       totalProperties,
-      totalFeatured,
+      totalAvailable,
       totalBlogPosts,
       totalContacts,
       propertiesLast30,
       propertiesPrev30,
-      featuredLast30,
-      featuredPrev30,
+      availableLast30,
+      availablePrev30,
       blogLast30,
       blogPrev30,
       contactsLast30,
       contactsPrev30,
     ] = await Promise.all([
       Property.countDocuments({}),
-      Property.countDocuments({ featured: true }),
+      Property.countDocuments(available),
       Blog.countDocuments({}),
       Contact.countDocuments({}),
       Property.countDocuments({ createdAt: { $gte: last30Start } }),
@@ -45,11 +47,11 @@ router.get('/stats', async (req, res) => {
         createdAt: { $gte: prev30Start, $lt: last30Start },
       }),
       Property.countDocuments({
-        featured: true,
+        ...available,
         createdAt: { $gte: last30Start },
       }),
       Property.countDocuments({
-        featured: true,
+        ...available,
         createdAt: { $gte: prev30Start, $lt: last30Start },
       }),
       Blog.countDocuments({ createdAt: { $gte: last30Start } }),
@@ -65,13 +67,13 @@ router.get('/stats', async (req, res) => {
     res.json({
       totals: {
         properties: totalProperties,
-        activeListings: totalFeatured,
+        activeListings: totalAvailable,
         blogPosts: totalBlogPosts,
         inquiries: totalContacts,
       },
       monthOverMonth: {
         properties: percentChange(propertiesLast30, propertiesPrev30),
-        activeListings: percentChange(featuredLast30, featuredPrev30),
+        activeListings: percentChange(availableLast30, availablePrev30),
         blogPosts: percentChange(blogLast30, blogPrev30),
         inquiries: percentChange(contactsLast30, contactsPrev30),
       },

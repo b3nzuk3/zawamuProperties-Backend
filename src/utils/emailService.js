@@ -2,34 +2,18 @@
 // In a production environment, you would integrate with services like:
 // - SendGrid, Mailgun, AWS SES, or similar
 
-import nodemailer from 'nodemailer'
+import { createSmtpTransporter, getSmtpConfiguration } from './smtpTransport.js'
+export { sendContactNotification } from './contactEmailService.js'
 
-// Create a transporter (you'll need to configure this with your email service)
-const createTransporter = () => {
-  // For development, you can use a service like Ethereal Email or Gmail
-  // For production, use a proper email service
-  return nodemailer.createTransporter({
-    // Example Gmail configuration (you'll need to use App Passwords)
-    // service: 'gmail',
-    // auth: {
-    //   user: process.env.EMAIL_USER,
-    //   pass: process.env.EMAIL_PASS
-    // }
-
-    // For now, we'll use a mock transporter for development
-    host: 'smtp.ethereal.email',
-    port: 587,
-    auth: {
-      user: 'ethereal.user@ethereal.email',
-      pass: 'ethereal.pass',
-    },
-  })
-}
+const createTransporter = () => createSmtpTransporter()
 
 // Send property alert email
 const sendPropertyAlert = async (savedSearch, matchingProperties) => {
   try {
     const transporter = createTransporter()
+    const smtp = getSmtpConfiguration()
+    const sender = smtp?.from || process.env.EMAIL_FROM?.trim()
+    if (!transporter || !sender) return { success: false, error: 'notification_not_configured' }
 
     const subject = `New Properties Match Your Search: ${savedSearch.name}`
 
@@ -216,28 +200,17 @@ const sendPropertyAlert = async (savedSearch, matchingProperties) => {
     `
 
     const mailOptions = {
-      from: process.env.EMAIL_FROM || 'noreply@zawamuproperties.com',
+      from: sender,
       to: savedSearch.userEmail,
       subject: subject,
       text: textContent,
       html: htmlContent,
     }
 
-    // In development, we'll just log the email instead of actually sending it
-    if (process.env.NODE_ENV === 'development') {
-      console.log('📧 EMAIL ALERT (Development Mode):')
-      console.log('To:', savedSearch.userEmail)
-      console.log('Subject:', subject)
-      console.log('Properties:', matchingProperties.length)
-      console.log('---')
-      return { success: true, messageId: 'dev-mode-' + Date.now() }
-    }
-
     const result = await transporter.sendMail(mailOptions)
     return { success: true, messageId: result.messageId }
-  } catch (error) {
-    console.error('Error sending property alert email:', error)
-    return { success: false, error: error.message }
+  } catch {
+    return { success: false, error: 'delivery_uncertain' }
   }
 }
 
@@ -252,9 +225,6 @@ const sendPropertyAlerts = async (matches) => {
     if (
       savedSearch.alertsSentToday >= savedSearch.alertSettings.maxAlertsPerDay
     ) {
-      console.log(
-        `Skipping alert for ${savedSearch.userEmail} - daily limit reached`
-      )
       continue
     }
 
@@ -283,13 +253,12 @@ const sendPropertyAlerts = async (matches) => {
           error: result.error,
         })
       }
-    } catch (error) {
-      console.error(`Error sending alert to ${savedSearch.userEmail}:`, error)
+    } catch {
       results.push({
         savedSearchId: savedSearch._id,
         userEmail: savedSearch.userEmail,
         success: false,
-        error: error.message,
+        error: 'delivery_uncertain',
       })
     }
   }

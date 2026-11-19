@@ -1,4 +1,12 @@
-# Backend Handoff — Phase D
+# Backend Handoff — Phase E
+
+## Current accepted Phase E checkpoint (supersedes all history below)
+
+Phase E is complete in the local commit containing this handoff on `master` (D baseline `b82329a`). Public general/property enquiries persist before mail, use trusted stored context, and return receipt-only success. Owner inbox/detail/status/retry endpoints enforce current persisted-user allowlist, server paging/filters and no-store. Notifications use configured SMTP, escaped contact HTML, visitor replyTo, safe failure codes and five-attempt atomic retry leases. Stats count Available/missing legacy status rather than Featured. No migration/backfill/catalog seeding or retained-data rewrite.
+
+Fresh parent39focused tests/syntax/whitespacePASS; explicit model/mail mocks, real Mongoose hydration. SpecPASS `deleg_b4005ebb` carrying `deleg_6903b809`; quality/securityAPPROVED `deleg_f4a7277c`, including frontend/API compatibility. Review fixes have RED→GREEN regressions. Separate real productionChromium/Express/Mongo8 acceptance131checksPASS/34browserAPIresponses, exact retry race200/409 and DB read-back. Six local Nodemailer fixture sends, fonts11/rates2 explicitfixtures, no real mail/provider operation; zero console/page errors. Owned DB dropped/readbackabsent, container removed/readbackabsent, API/browser/preview closed/disconnected. Parent independently checked source hashes and no matching container. See `docs/phase-e-acceptance.md` for exact commands/provenance and cleanup.
+
+STOP before Phase F for explicit approval. Final full cross-phase gate deferred. No push/deploy/production changes/real messages. Recipient/SMTP/sender/owner/site-origin/proxy/shared limiter configuration and live-provider delivery remain launch gates, along with baseline frontend/dependency/saved-search privacy debt. F must align alert matching and escape legacy alert HTML before enabling it. No workers/reviews remain. Root plan/docs are local-only; child handoffs/acceptance docs versioned. Entries below are historical, not current status.
 
 ## Accepted checkpoint — final status
 
