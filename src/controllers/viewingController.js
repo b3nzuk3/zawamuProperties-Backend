@@ -5,7 +5,6 @@ export const createViewingRequest = async (req, res) => {
   try {
     const {
       propertyId,
-      propertyTitle,
       name,
       email,
       phone,
@@ -14,15 +13,27 @@ export const createViewingRequest = async (req, res) => {
       message,
     } = req.body
 
-    // Verify property exists
+    // Verify the listing exists before accepting a public request.
+    if (!propertyId) {
+      return res.status(404).json({ message: 'Property not found' })
+    }
     const property = await Property.findById(propertyId)
     if (!property) {
       return res.status(404).json({ message: 'Property not found' })
     }
 
+    const availability = property.availability
+    if (availability !== undefined && availability !== 'available') {
+      return res.status(409).json({
+        message: availability === 'sold' || availability === 'rented'
+          ? `This property is ${availability} and is no longer available for viewings`
+          : 'This property is not available for viewings',
+      })
+    }
+
     const viewingRequest = await ViewingRequest.create({
       propertyId,
-      propertyTitle,
+      propertyTitle: property.title,
       name,
       email,
       phone,

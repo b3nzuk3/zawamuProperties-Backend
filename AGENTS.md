@@ -1,10 +1,10 @@
 # Agent Instructions — Zawamu
 
 ## Checkpoint contract (user instruction)
-- Work one approved phase at a time. **Phase B is complete: STOP for explicit Phase C approval. Migration was removed by the user; do not add migration tooling, backfill, or catalog seeding jobs.**
+- Work one approved phase at a time. **Phase D is authorized and in progress. Complete its verify/review/commit checkpoint, then STOP before Phase E for renewed approval. Migration was removed by the user; do not add migration tooling, backfill, or catalog seeding jobs.**
 - Every phase is a checkpoint: implement, perform scoped verification, review, update handoff, commit its scoped changes, then STOP and wait for explicit user approval before starting the next phase.
 - User clarification: keep phase checkpoints/approvals; run the final full cross-phase test pass after all phases. Do not repeatedly run that final aggregate gate at intermediate checkpoints.
-- Do not push, deploy, change production data, send real messages, or start Phase C without separate approval.
+- Do not push, deploy, change production data, send real messages, or start Phase E without separate approval.
 - Preserve unrelated work. Inspect status/diffs before editing and stage exact paths only.
 
 ## Workspace

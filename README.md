@@ -80,7 +80,7 @@ For browser acceptance, `--serve` keeps the disposable API alive after its asser
 
 ## Phase B: property contracts and reusable features
 
-Phase B covers the backend only. Owner forms, public rental/offer presentation, availability-based viewing rejection, enquiries, and saved-search alignment remain later phases. **Migration was removed by the user:** no migration script, historical-record backfill, or automatic feature-catalog seeding is required. Existing property feature snapshots remain independent of the catalog.
+Phase B added the property/feature backend contract; Phase C added owner forms. Phase D adds public presentation and availability-based viewing rejection. Real enquiry/email/inbox and saved-search alignment remain Phases E/F. **Migration was removed by the user:** no migration script, historical-record backfill, or automatic feature-catalog seeding is required. Existing property feature snapshots remain independent of the catalog.
 
 ### Property contract
 
@@ -100,6 +100,10 @@ Phase B covers the backend only. Owner forms, public rental/offer presentation, 
 - There are no catalog rename/delete endpoints. Removing a selection from a property does not remove the reusable catalog entry or rewrite other property snapshots.
 
 ## Deployment
+
+### Phase D: viewing availability
+
+Public `POST /api/viewing-requests` still accepts anonymous visitors. Missing properties return 404; Sold/Rented properties return 409 without creating an appointment. Only missing or explicitly `available` status permits viewings; null/empty/unknown historical values fail closed with 409. Legacy listings with missing availability retain Available read compatibility. Existing viewing requests and owner management are not deleted or automatically cancelled when a listing becomes unavailable. General contact submission remains separate and permitted; email/inbox work is not included in Phase D.
 
 - Deploy to [Render](https://render.com/), Heroku, or any Node.js host.
 - Set environment variables in your host dashboard.

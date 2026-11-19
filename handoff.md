@@ -1,4 +1,20 @@
-# Backend Handoff — Phase B
+# Backend Handoff — Phase D
+
+## Accepted checkpoint — final status
+
+Phase D complete in the commit containing this handoff. Spec PASS `deleg_e582a712`; quality APPROVED `deleg_0bbc8297` carrying `deleg_9a36119e`/`deleg_c8d3c295` after availability fixes. Backend25focused viewing/access tests/syntax/whitespacePASS. Missing status alone defaults Available; null/empty/unknown fails409/no insert and public badgeUnavailable; owner edit requires explicit correction. Frontend final61focused tests/build/lintPASS,3original app typing errors. Real browser/API/Mongo66assertionsPASS/10browserAPIresponses preceded the final owner-form-only repair, freshly covered by focused tests, not a browser rerun. All disposable resources cleaned. No pending workers/reviews, push/deploy/messages/production/migration.
+
+User explicitly approved E; begin after both D commits/clean-state read-back. E retains its own checkpoint; STOP before F. Recipient/SMTP/final acceptance remain rollout gates. Final aggregate deferred; root plan/docs local-only.
+
+## Current Phase D checkpoint (supersedes historical entries)
+
+User approved D only. Availability controller and focused tests implemented; specification PASS `deleg_e582a712` carrying integrated `deleg_542766df`. Final quality/security review `deleg_9a36119e` pending; no Phase D commit yet. Branch `master` starting at `0de20ac`; frontend `main` starting `6627614`. Finish scoped commit then STOP before E. No push/deploy/production changes/messages/migration/backfill/catalog seeding.
+
+Public viewing submission returns404 missing,409Sold/Rented/no insert; legacy missing availability allowed; title derived from persisted property. Historical appointment management unchanged. Final `node --test test/viewing-availability.test.js test/admin-access.test.js`:24PASS, no failures/skips (explicit model mocks); controller syntax/whitespacePASS. No backend build/typecheck/lint scripts exist.
+
+Separate real Express/Mongo8+productionChromium acceptance54assertionsPASS,7browser APIresponses, one expected real stale-page409. Direct HTTP available/legacy viewing persistence, sold/rented no-insert409, legacy property unchanged and existing general contacts persisted. Browser stale submission after actual disposableDB status update preserved inputs and appointment count. Rates/fonts fixture only; no SMTP/upload/WhatsApp send. Final result TMPDIR `zawamu-phase-d/acceptance-7d757913841fbe4f/result.json`; DB dropped/readbackempty, disconnected, API/preview/browser stopped, exact container removed/readbackabsent. See `docs/phase-d-acceptance.md` and sibling frontend doc. Final full cross-phase suite deferred.
+
+Quality verdict/final docs/exact-path commit pending. E/F remain unstarted. Owner allowlist, notification recipient/SMTP, saved-search contract/privacy gaps, inherited advisories/frontend baseline debt remain rollout gates. Root plan/docs local-only.
 
 ## Current checkpoint
 Phase B complete, verified and independently approved: specification PASS (`deleg_5405a0b6`), quality APPROVED (`deleg_f1e31537`), concurrency fix re-review APPROVED (`deleg_de2b2645`, independently reran65/65 tests). Branch `master`, previous checkpoint `d04522b`; the commit containing this handoff is the Phase B checkpoint (`git log -1 --oneline`). STOP before Phase C and wait for explicit approval. User removed migration: no migration scripts, backfill or feature-catalog seeding. No push, deployment, production data changes or real messages authorized.
