@@ -1,6 +1,7 @@
 import User from '../models/User.js'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
+import { userDto } from '../utils/ownerCapability.js'
 
 export const register = async (req, res) => {
   try {
@@ -39,7 +40,7 @@ export const login = async (req, res) => {
     })
     res.json({
       token,
-      user: { id: user._id, name: user.name, email: user.email },
+      user: userDto(user),
     })
   } catch (err) {
     res.status(500).json({ message: 'Server error', error: err.message })
@@ -52,7 +53,7 @@ export const profile = async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: 'User not found' })
     }
-    res.json(user)
+    res.json(userDto(user))
   } catch (err) {
     res.status(500).json({ message: 'Server error', error: err.message })
   }

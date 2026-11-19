@@ -8,6 +8,14 @@ const authMiddleware = (req, res, next) => {
   const token = authHeader.split(' ')[1]
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET)
+    if (
+      !decoded ||
+      typeof decoded !== 'object' ||
+      typeof decoded.userId !== 'string' ||
+      !decoded.userId.trim()
+    ) {
+      return res.status(401).json({ message: 'Invalid token' })
+    }
     req.userId = decoded.userId
     next()
   } catch (err) {

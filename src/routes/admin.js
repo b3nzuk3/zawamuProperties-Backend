@@ -3,7 +3,10 @@ import Property from '../models/Property.js'
 import Blog from '../models/Blog.js'
 import Contact from '../models/Contact.js'
 
+import authMiddleware from '../middleware/authMiddleware.js'
+import adminMiddleware from '../middleware/adminMiddleware.js'
 const router = express.Router()
+router.use(authMiddleware, adminMiddleware)
 
 // Helper to compute percent change between two numbers
 function percentChange(current, previous) {

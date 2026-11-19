@@ -9,7 +9,9 @@
   },
   "scripts": {
     "start": "node src/index.js",
-    "dev": "nodemon src/index.js"
+    "dev": "nodemon src/index.js",
+    "test": "node --test test/*.test.js",
+    "verify:phase-a": "node scripts/verify-phase-a.mjs"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

@@ -1,10 +1,8 @@
 import express from 'express'
 import multer from 'multer'
 import { configureCloudinary } from '../utils/cloudinary.js'
-import dotenv from 'dotenv'
-
-// Force load environment variables
-dotenv.config()
+import authMiddleware from '../middleware/authMiddleware.js'
+import adminMiddleware from '../middleware/adminMiddleware.js'
 
 const router = express.Router()
 const storage = multer.memoryStorage()
@@ -46,7 +44,7 @@ const streamUpload = (buffer) => {
   })
 }
 
-router.post('/', upload.array('images', 10), async (req, res) => {
+router.post('/', authMiddleware, adminMiddleware, upload.array('images', 10), async (req, res) => {
   try {
     console.log('Received upload request')
     if (!req.files || req.files.length === 0) {
