@@ -1,28 +1,51 @@
 import express from 'express'
 import {
-  createSavedSearch,
-  getUserSavedSearches,
-  getSavedSearch,
-  updateSavedSearch,
-  deleteSavedSearch,
-  getMatchingProperties,
   checkForNewMatches,
+  consumeAccessLink,
+  createSavedSearch,
+  deleteSavedSearch,
+  deleteSavedSearchSession,
+  getMatchingProperties,
+  getSavedSearch,
+  getUserSavedSearches,
+  requestAccessLink,
+  updateSavedSearch,
 } from '../controllers/savedSearchController.js'
-
 import authMiddleware from '../middleware/authMiddleware.js'
 import adminMiddleware from '../middleware/adminMiddleware.js'
+import {
+  optionalSavedSearchSession,
+  requireSavedSearchSession,
+  savedSearchAccessConsumeRateLimit,
+  savedSearchAccessRequestRateLimit,
+} from '../middleware/savedSearchAccess.js'
+
 const router = express.Router()
 
-// Public routes (no authentication required)
-router.post('/', createSavedSearch)
-router.get('/user/:userEmail', getUserSavedSearches)
-router.get('/:id', getSavedSearch)
-router.get('/:id/properties', getMatchingProperties)
+router.use((_req, res, next) => {
+  res.set('Cache-Control', 'no-store')
+  next()
+})
 
-// Legacy user update/delete contracts remain public in Phase A.
-router.put('/:id', updateSavedSearch)
-router.delete('/:id', deleteSavedSearch)
-// Email-triggering management endpoint requires the configured owner.
-router.get('/admin/check-matches', authMiddleware, adminMiddleware, checkForNewMatches)
+router.post('/access-links', savedSearchAccessRequestRateLimit, requestAccessLink)
+router.post('/access-links/consume', savedSearchAccessConsumeRateLimit, consumeAccessLink)
+router.delete('/session', deleteSavedSearchSession)
+
+router.post('/', savedSearchAccessRequestRateLimit, optionalSavedSearchSession, createSavedSearch)
+router.get('/', requireSavedSearchSession, getUserSavedSearches)
+router.get('/user/:userEmail', requireSavedSearchSession, getUserSavedSearches)
+
+router.get('/admin/check-matches', (_req, res) => {
+  res.status(405).json({ success: false, message: 'Use the explicit POST alert-runner endpoint' })
+})
+router.post('/admin/check-matches', authMiddleware, adminMiddleware, checkForNewMatches)
+router.all('/admin/check-matches', (_req, res) => {
+  res.status(405).json({ success: false, message: 'Method not allowed' })
+})
+
+router.get('/:id/properties', requireSavedSearchSession, getMatchingProperties)
+router.get('/:id', requireSavedSearchSession, getSavedSearch)
+router.put('/:id', requireSavedSearchSession, updateSavedSearch)
+router.delete('/:id', requireSavedSearchSession, deleteSavedSearch)
 
 export default router

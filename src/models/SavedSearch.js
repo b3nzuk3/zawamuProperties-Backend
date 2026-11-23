@@ -9,6 +9,17 @@ const savedSearchSchema = new mongoose.Schema(
       required: true,
       trim: true,
       lowercase: true,
+      immutable: true,
+    },
+    // Only access-link verification and explicit alert opt-in populate these.
+    // Missing legacy values intentionally remain unverified/unconsented.
+    verifiedAt: {
+      type: Date,
+      default: undefined,
+    },
+    alertConsentAt: {
+      type: Date,
+      default: undefined,
     },
     userName: {
       type: String,
@@ -149,6 +160,13 @@ const savedSearchSchema = new mongoose.Schema(
 
 // Index for efficient querying
 savedSearchSchema.index({ userEmail: 1, isActive: 1 })
+savedSearchSchema.index({
+  isActive: 1,
+  'alertSettings.isActive': 1,
+  verifiedAt: 1,
+  alertConsentAt: 1,
+  _id: 1,
+})
 savedSearchSchema.index({
   'searchCriteria.county': 1,
   'searchCriteria.constituency': 1,

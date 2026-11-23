@@ -38,12 +38,12 @@ test('root and public browse/contact/viewing use real HTTP with model mocks', as
   assert.equal((await api.request('POST', '/api/contact', null, {name:'Visitor',email:'visitor@example.test',message:'Hello'})).status, 201)
   assert.equal((await api.request('POST', '/api/viewing-requests', null, {propertyId:'listing',name:'Visitor'})).status, 201)
   assert.equal((await api.request('POST', '/api/auth/register')).status, 404)
-  // Phase A intentionally preserves legacy public saved-search contracts.
+  // Saved-search management requires a separate verified email session.
   assert.equal((await api.request('POST', '/api/saved-searches')).status,400)
-  assert.equal((await api.request('GET', '/api/saved-searches/user/visitor@example.test')).status,200)
-  assert.equal((await api.request('GET', '/api/saved-searches/search')).status,404)
-  assert.equal((await api.request('GET', '/api/saved-searches/search/properties')).status,404)
-  assert.equal((await api.request('PUT', '/api/saved-searches/search')).status,200)
-  assert.equal((await api.request('DELETE', '/api/saved-searches/search')).status,200)
+  assert.equal((await api.request('GET', '/api/saved-searches/user/visitor@example.test')).status,401)
+  assert.equal((await api.request('GET', '/api/saved-searches/search')).status,401)
+  assert.equal((await api.request('GET', '/api/saved-searches/search/properties')).status,401)
+  assert.equal((await api.request('PUT', '/api/saved-searches/search')).status,401)
+  assert.equal((await api.request('DELETE', '/api/saved-searches/search')).status,401)
   assert.equal(mongoose.connection.readyState, 0)
 })

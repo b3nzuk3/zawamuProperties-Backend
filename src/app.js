@@ -28,6 +28,11 @@ app.use('/api/contact', (_req, res, next) => {
   res.set('Cache-Control', 'no-store')
   next()
 })
+// Install before the JSON parser so parser failures cannot cache private data.
+app.use('/api/saved-searches', (_req, res, next) => {
+  res.set('Cache-Control', 'no-store')
+  next()
+})
 app.use(cors())
 app.use('/api/contact', (req, res, next) => {
   if (req.method === 'POST' && req.path === '/') return contactSubmissionRateLimiter(req, res, next)
@@ -58,6 +63,16 @@ app.use('/api/contact', (error, _req, res, next) => {
   }
   if (error?.type === 'entity.too.large') {
     return res.status(413).json({ message: 'Enquiry request is too large' })
+  }
+  return next(error)
+})
+
+app.use('/api/saved-searches', (error, _req, res, next) => {
+  if (error instanceof SyntaxError && Object.hasOwn(error, 'body')) {
+    return res.status(400).json({ success: false, message: 'Invalid saved-search request' })
+  }
+  if (error?.type === 'entity.too.large') {
+    return res.status(413).json({ success: false, message: 'Saved-search request is too large' })
   }
   return next(error)
 })

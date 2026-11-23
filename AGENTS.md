@@ -1,7 +1,7 @@
 # Agent Instructions — Zawamu
 
 ## Checkpoint contract (user instruction)
-- **Phases A–F have reached the local implementation/acceptance checkpoint. Finish only Phase F's scoped commit closure, then STOP. No further implementation, push, deployment, production writes or real messages without separate approval. Migration was removed by the user; do not add migration tooling, backfill, or catalog seeding jobs.** See handoffs and `docs/phase-f-acceptance.md` for evidence and unresolved launch gates.
+- **Phases A–F are locally committed. User now authorizes a local launch-readiness checkpoint to repair remaining issues and prepare, not execute, a push. Approved design: email-verified guest saved-search management; durable cadence/deduplication controls; immediate per worker invocation, daily 09:00 and weekly Monday 09:00 Africa/Nairobi. Admin and enquiry recipient: zawamuproperty@gmail.com. Preserve existing admin credentials and disabled registration. Follow `.hermes/plans/2026-11-23-launch-readiness.md` at workspace root. Verify/review, commit exact scoped paths, then STOP. No push/deploy/production writes/real messages. No migration tooling, backfill or catalog seeding jobs.**
 - Every phase is a checkpoint: implement, perform scoped verification, review, update handoff, commit its scoped changes, then STOP and wait for explicit user approval before starting the next phase.
 - User clarification: keep phase checkpoints/approvals; run the final full cross-phase test pass after all phases. Do not repeatedly run that final aggregate gate at intermediate checkpoints.
 - Do not push, deploy, change production data, or send real messages without separate approval. Phase F authorization covers local implementation and disposable-fixture acceptance only.
@@ -34,7 +34,7 @@ F. Saved searches/alerts, rollout preparation and final acceptance.
 - No secrets in source, logs, commits or handoff. Use only explicitly disposable test infrastructure for persistence checks.
 
 ## Confirmed product constraints for later phases
-Monthly rentals; free-text locations; inline-create reusable features; company WhatsApp +254711168716; discounts for sales/rentals; one listing per unit; Sold/Rented remains visible, blocks viewings but permits enquiries. General and property enquiries must persist and notify by email. Recipient remains TBD.
+Monthly rentals; free-text locations; inline-create reusable features; company WhatsApp +254711168716; discounts for sales/rentals; one listing per unit; Sold/Rented remains visible, blocks viewings but permits enquiries. General and property enquiries must persist and notify by email. Approved recipient/admin email: zawamuproperty@gmail.com; SMTP credentials and live delivery remain external gates.
 
 ## Repository scope
 Backend repository. Paths prefixed by the other repository name belong to the sibling workspace and must not be edited by a worker assigned only here.

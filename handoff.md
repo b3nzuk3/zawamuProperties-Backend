@@ -1,4 +1,12 @@
-# Backend Handoff — Phase F
+# Backend Handoff — Launch Readiness
+
+## Launch-readiness local checkpoint — STOP after scoped commit
+
+The user approved the launch-readiness repair checkpoint after Phase F. This checkpoint advances backend `master` from `2fc1f1d`; its commit includes this handoff. Verified guest saved-search ownership/private paging, explicit consent, indexed/leased worker and Nairobi cadence, unknown-send safety, safe readiness CLI and dependency repairs are implemented. Existing admin password/disabled registration preserved; approved owner/recipient `zawamuproperty@gmail.com`. No push/deploy/production writes/real messages/migration/backfill/seeding authorized.
+
+Clean npm-installed sibling copies: backend152tests PASS; frontend185tests/28files/typecheck/full lint/build PASS; full/production audits both zero. Supplementary23changedbackendJS syntax and44changedfrontendfilelint passed. Both specification reviews and independent full-stack quality/security passed/no blockers. Real Mongo8/executable Express/production Chromium run `e4539882-d033-4270-8729-daf636e13eff` passed11 gates,105 browser assertions/80 API responses; verified guest/privacy/consent, fixture owner/ordinary/anonymous boundaries, enquiries, cadence/deduplication/concurrency, unknown-quota quarantine and CLI inventory nonmutation. All owned databases dropped/read back empty; exact containers/process groups/browser closed/read back absent or disconnected. Nodemailer ESM/font/currency/images are explicit fixtures, not provider evidence. Durable results and executable hashes: `docs/launch-readiness-evidence.json`; runbook/known limits/external gates: `docs/launch-readiness.md`. Root plan/handoff/verifier bundle are local-only. STOP: only separate approval can authorize push, deployment, real SMTP/owner-account checks or timer activation. The following Phase F/older sections are historical, not current status.
+
+## Historical Phase F
 
 ## Completed Phase F local checkpoint — STOP
 

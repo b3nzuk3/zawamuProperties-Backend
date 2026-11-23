@@ -7,10 +7,10 @@ export async function serve(app) {
   await once(server, 'listening')
   return {
     server,
-    async request(method, path, token, body = {}, contentType = 'application/json') {
+    async request(method, path, token, body = {}, contentType = 'application/json', extraHeaders = {}) {
       const response = await fetch(`http://127.0.0.1:${server.address().port}${path}`, {
         method,
-        headers: { 'Content-Type': contentType, ...(token ? { Authorization: `Bearer ${token}` } : {}) },
+        headers: { 'Content-Type': contentType, ...(token ? { Authorization: `Bearer ${token}` } : {}), ...extraHeaders },
         ...(method === 'GET' ? {} : { body: contentType === 'application/json' ? JSON.stringify(body) : body }),
       })
       const text = await response.text()

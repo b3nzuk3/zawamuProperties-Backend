@@ -4,6 +4,7 @@ import nodemailer from 'nodemailer'
 import app from '../src/app.js'
 import Property from '../src/models/Property.js'
 import SavedSearch from '../src/models/SavedSearch.js'
+import SavedSearchSession from '../src/models/SavedSearchSession.js'
 import { checkForNewMatches } from '../src/controllers/savedSearchController.js'
 import { sendPropertyAlert } from '../src/utils/emailService.js'
 import { validateSavedSearchCriteria } from '../src/utils/savedSearchRules.js'
@@ -11,7 +12,7 @@ import { query, serve, stub } from './helpers/http.js'
 
 const mailEnv = [
   'SMTP_HOST', 'SMTP_PORT', 'SMTP_SECURE', 'SMTP_USER', 'SMTP_PASSWORD',
-  'SMTP_FROM', 'FRONTEND_URL', 'EMAIL_FROM',
+  'SMTP_FROM', 'FRONTEND_URL', 'EMAIL_FROM', 'SAVED_SEARCH_ALERTS_ENABLED',
 ]
 
 function preserveEnv(t) {
@@ -76,6 +77,32 @@ function fakeResponse() {
   }
 }
 
+function verifiedSession(t) {
+  const token = 'A'.repeat(43)
+  stub(t, SavedSearchSession, 'findOne', async () => ({
+    email: 'visitor@example.test',
+    expiresAt: new Date(Date.now() + 60_000),
+    revokedAt: null,
+  }))
+  return token
+}
+
+function privateRequest(api, token, method, path, body = {}) {
+  return api.request(method, path, undefined, body, 'application/json', { 'X-Saved-Search-Session': token })
+}
+
+function propertyCursor(rows) {
+  return {
+    sort() { return this },
+    cursor() {
+      return {
+        async *[Symbol.asyncIterator]() { yield* rows },
+        async close() {},
+      }
+    },
+  }
+}
+
 test('model matching applies read-time property defaults, effective price, zero bounds, and required location constraints', () => {
   const search = savedSearch({
     location: 'Umoja',
@@ -129,11 +156,12 @@ test('hydrated missing room counts do not become stored zero counts for bounded 
     assert.equal(search.matchesProperty(explicitZero), true)
   }
   const search = savedSearch({ maxBedrooms: 2, maxBathrooms: 1 })
-  stub(t, SavedSearch, 'findById', async () => search)
-  stub(t, Property, 'find', () => query([missing, explicitZero]))
+  stub(t, SavedSearch, 'findOne', async () => search)
+  stub(t, Property, 'find', () => propertyCursor([missing, explicitZero]))
+  const token = verifiedSession(t)
   const api = await serve(app)
   t.after(() => api.close())
-  const response = await api.request('GET', '/api/saved-searches/64b000000000000000000001/properties')
+  const response = await privateRequest(api, token, 'GET', '/api/saved-searches/64b000000000000000000001/properties')
   assert.equal(response.status, 200)
   assert.deepEqual(response.data.data.properties.map(row => row._id), [String(explicitZero._id)])
 })
@@ -218,15 +246,16 @@ test('HTTP matching uses the same predicate and does not query a nonexistent isA
     property(13, { offerPercent: 20, ward: 'Kayole' }),
   ]
   let propertyFilter
-  stub(t, SavedSearch, 'findById', async () => search)
+  stub(t, SavedSearch, 'findOne', async () => search)
   stub(t, Property, 'find', filter => {
     propertyFilter = filter
-    return query(candidates)
+    return propertyCursor(candidates)
   })
+  const token = verifiedSession(t)
   const api = await serve(app)
   t.after(() => api.close())
 
-  const response = await api.request('GET', '/api/saved-searches/64b000000000000000000001/properties?page=1&limit=10')
+  const response = await privateRequest(api, token, 'GET', '/api/saved-searches/64b000000000000000000001/properties?page=1&limit=10')
   assert.equal(response.status, 200)
   assert.deepEqual(propertyFilter, {})
   const expected = candidates.filter(candidate => search.matchesProperty(candidate)).map(candidate => String(candidate._id))
@@ -242,6 +271,7 @@ test('saved-search create and update reject unsafe criteria before querying stor
   let updates = 0
   stub(t, SavedSearch, 'findOne', async () => { lookups += 1; return null })
   stub(t, SavedSearch, 'findByIdAndUpdate', async () => { updates += 1; return null })
+  const token = verifiedSession(t)
   const api = await serve(app)
   t.after(() => api.close())
 
@@ -265,7 +295,7 @@ test('saved-search create and update reject unsafe criteria before querying stor
     ...base,
     searchCriteria: { minBedrooms: null },
   })
-  const badUpdate = await api.request('PUT', '/api/saved-searches/64b000000000000000000001', undefined, {
+  const badUpdate = await privateRequest(api, token, 'PUT', '/api/saved-searches/64b000000000000000000001', {
     searchCriteria: { listingPurpose: 'lease' },
   })
 
@@ -278,35 +308,21 @@ test('saved-search create and update reject unsafe criteria before querying stor
   assert.equal(updates, 0)
 })
 
-test('new-match alerts include only available listings and keep legacy missing availability read-compatible', async t => {
+test('owner alert execution uses the durable runner and returns only its safe summary', async t => {
   preserveEnv(t)
-  for (const key of ['SMTP_HOST', 'SMTP_PORT', 'SMTP_SECURE', 'SMTP_FROM', 'FRONTEND_URL']) delete process.env[key]
-  const search = savedSearch({ propertyTypes: ['Apartment'] })
-  const candidates = [
-    property(20, { availability: 'available' }),
-    property(21, { availability: 'sold' }),
-    property(22, { availability: 'rented' }),
-    property(23, { availability: 'paused' }),
-    property(24, { availability: null }),
-    property(25, { availability: undefined }),
-  ]
-  let propertyFilter
-  stub(t, SavedSearch, 'find', async () => [search])
-  stub(t, Property, 'find', filter => {
-    propertyFilter = filter
-    return query(candidates)
-  })
-
+  process.env.SAVED_SEARCH_ALERTS_ENABLED = 'false'
+  let searchReads = 0
+  let propertyReads = 0
+  stub(t, SavedSearch, 'find', async () => { searchReads += 1; return [] })
+  stub(t, Property, 'find', () => { propertyReads += 1; return query([]) })
   const response = fakeResponse()
-  await checkForNewMatches({ query: { hoursBack: '24' } }, response)
-
+  await checkForNewMatches({}, response)
   assert.equal(response.statusCode, 200)
   assert.equal(response.body.success, true)
-  assert.deepEqual(Object.keys(propertyFilter), ['createdAt'])
-  assert.deepEqual(
-    response.body.data.matches[0].matchingProperties.map(candidate => String(candidate._id)),
-    [String(candidates[0]._id), String(candidates[5]._id)],
-  )
+  assert.equal(response.body.data.disabled, true)
+  assert.equal(response.body.data.dryRun, true)
+  assert.equal(searchReads, 0)
+  assert.equal(propertyReads, 0)
 })
 
 test('saved-search alert HTML escapes dynamic text and uses only trusted frontend-origin links', async t => {
@@ -392,7 +408,8 @@ test('rental alert HTML and text show discounted cents, original amount, offer a
 
 test('saved-search update rejects operator and dotted criteria bypasses before storage', async t => {
   let updates = 0
-  stub(t, SavedSearch, 'findByIdAndUpdate', async () => { updates += 1; return null })
+  stub(t, SavedSearch, 'findOneAndUpdate', async () => { updates += 1; return null })
+  const token = verifiedSession(t)
   const api = await serve(app)
   t.after(() => api.close())
   for (const payload of [
@@ -400,7 +417,7 @@ test('saved-search update rejects operator and dotted criteria bypasses before s
     { 'searchCriteria.listingPurpose': 'lease' },
     { 'searchCriteria.maxPrice': 1, 'searchCriteria.minPrice': 20 },
   ]) {
-    const response = await api.request('PUT', '/api/saved-searches/64b000000000000000000001', undefined, payload)
+    const response = await privateRequest(api, token, 'PUT', '/api/saved-searches/64b000000000000000000001', payload)
     assert.equal(response.status, 400)
   }
   assert.equal(updates, 0)

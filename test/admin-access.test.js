@@ -15,13 +15,18 @@ const endpoints = [
   ['GET','/api/viewing-requests',200], ['GET','/api/viewing-requests/item',200],
   ['PUT','/api/viewing-requests/item',200], ['DELETE','/api/viewing-requests/item',200],
   ['POST','/api/upload',400], ['POST','/api/blog',201], ['PUT','/api/blog/item',200],
-  ['DELETE','/api/blog/item',200], ['GET','/api/analytics',200], ['GET','/api/saved-searches/admin/check-matches',200],
+  ['DELETE','/api/blog/item',200], ['GET','/api/analytics',200], ['POST','/api/saved-searches/admin/check-matches',200],
 ]
 
 async function setup(t) {
-  const previous = { JWT_SECRET: process.env.JWT_SECRET, ADMIN_EMAILS: process.env.ADMIN_EMAILS }
+  const previous = {
+    JWT_SECRET: process.env.JWT_SECRET,
+    ADMIN_EMAILS: process.env.ADMIN_EMAILS,
+    SAVED_SEARCH_ALERTS_ENABLED: process.env.SAVED_SEARCH_ALERTS_ENABLED,
+  }
   process.env.JWT_SECRET = 'local-test-secret-not-for-deployment'
   process.env.ADMIN_EMAILS = ' other@example.test, OWNER@Example.Test , , '
+  process.env.SAVED_SEARCH_ALERTS_ENABLED = 'false'
   t.after(() => { for (const [key,value] of Object.entries(previous)) value === undefined ? delete process.env[key] : process.env[key] = value })
   let actor = { _id:'actor', name:'Actor', email:'ordinary@example.test', password:'private', internal:'never expose' }
   const propertyFixture = {
@@ -75,6 +80,7 @@ test('every owner endpoint rejects anonymous and ordinary identities, and permit
       assert.equal((await api.request(method,path,api.token({}),body)).status,success)
     })
   }
+  assert.equal((await api.request('GET','/api/saved-searches/admin/check-matches')).status,405)
 })
 
 test('upload rejects unauthorized malformed multipart before multer parses it', async t => {
