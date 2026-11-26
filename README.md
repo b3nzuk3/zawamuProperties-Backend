@@ -2,9 +2,13 @@
 
 This is the backend API for Zawamu Properties, built with Node.js, Express, and MongoDB.
 
-## Current launch-readiness follow-up
+## R2 / WebP media checkpoint
 
-See [`docs/launch-readiness.md`](docs/launch-readiness.md) for the current verified-guest saved-search contract, durable alert worker, approved owner/recipient, credential handling, configuration checks and follow-up verification status. Phase A–F sections below retain historical checkpoint context. Local repairs are being prepared for a scoped commit; this is not push/deployment/provider approval.
+Owner image uploads now use Cloudflare R2, with application-generated WebP thumbnail/card/large variants. Cloudinary's SDK and upload integration are removed. Read [`docs/r2-images.md`](docs/r2-images.md) for required backend R2 configuration, limits, native Sharp installation, unchanged URL persistence, verification and separate provider/legacy-asset retirement gates. Existing hosted images are not moved or deleted by removing the integration. This local checkpoint does not authorize push/deployment or account cancellation.
+
+## Historical launch-readiness checkpoint
+
+See [`docs/launch-readiness.md`](docs/launch-readiness.md) for the verified-guest saved-search contract, durable alert worker, approved owner/recipient, credential handling and recorded local verification. This preceding checkpoint and Phase A–F sections below are historical; the R2 media checkpoint above is current. Local verification is not push/deployment/provider approval.
 
 ## Features
 

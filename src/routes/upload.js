@@ -1,65 +1,44 @@
 import express from 'express'
 import multer from 'multer'
-import { configureCloudinary } from '../utils/cloudinary.js'
+import { createImageStorage, ImageStorageError } from '../services/imageStorage.js'
+import { IMAGE_MAX_BYTES, ImageInputError } from '../utils/imageOptimizer.js'
 import authMiddleware from '../middleware/authMiddleware.js'
 import adminMiddleware from '../middleware/adminMiddleware.js'
 
-const router = express.Router()
-const storage = multer.memoryStorage()
-const upload = multer({ storage })
+export function createUploadRouter({ storeImages = files => createImageStorage().uploadImages(files) } = {}) {
+  const router = express.Router()
+  const parse = multer({
+    storage: multer.memoryStorage(),
+    limits: { fileSize: IMAGE_MAX_BYTES, files: 10, fields: 0, parts: 10 },
+  }).array('images', 10)
+  let active = false
 
-// Configure Cloudinary with env vars (do not log secrets)
-const cloudinaryConfig = {
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-}
-
-if (
-  !cloudinaryConfig.cloud_name ||
-  !cloudinaryConfig.api_key ||
-  !cloudinaryConfig.api_secret
-) {
-  console.warn(
-    'Cloudinary environment variables are missing. File uploads will fail until configured.'
-  )
-}
-
-const cloudinary = configureCloudinary(cloudinaryConfig)
-
-// Helper to upload a buffer to Cloudinary
-const streamUpload = (buffer) => {
-  return new Promise((resolve, reject) => {
-    const stream = cloudinary.uploader.upload_stream(
-      { resource_type: 'image' },
-      (error, result) => {
-        if (result) resolve(result)
-        else {
-          console.error('Cloudinary upload error:', error)
-          reject(error)
+  router.use((_req, res, next) => { res.set('Cache-Control', 'no-store'); next() })
+  // Authorize first, then reserve process capacity before buffering multipart.
+  // There is deliberately no unbounded in-memory waiting queue.
+  router.post('/', authMiddleware, adminMiddleware, (req, res) => {
+    if (active) return res.set('Retry-After', '5').status(503).json({ message: 'Another image upload is in progress. Please retry shortly.' })
+    active = true
+    parse(req, res, async error => {
+      try {
+        if (error) {
+          const oversized = error instanceof multer.MulterError && error.code === 'LIMIT_FILE_SIZE'
+          return res.status(oversized ? 413 : 400).json({ message: oversized ? 'Each image must be no larger than 8 MiB' : 'Invalid image upload request (maximum 10 images)' })
         }
+        if (!req.files?.length) return res.status(400).json({ message: 'No files uploaded' })
+        const result = await storeImages(req.files)
+        return res.json(result)
+      } catch (error) {
+        if (error instanceof ImageInputError) return res.status(error.status).json({ message: error.message })
+        // Do not log provider errors, credentials, request bodies or object URLs.
+        if (error instanceof ImageStorageError && error.cleanupIncomplete) console.warn('Image upload compensation incomplete; inspect orphaned new objects')
+        return res.status(503).json({ message: 'Image storage is temporarily unavailable' })
+      } finally {
+        active = false
       }
-    )
-    stream.end(buffer)
+    })
   })
+  return router
 }
 
-router.post('/', authMiddleware, adminMiddleware, upload.array('images', 10), async (req, res) => {
-  try {
-    console.log('Received upload request')
-    if (!req.files || req.files.length === 0) {
-      console.error('No files uploaded')
-      return res.status(400).json({ message: 'No files uploaded' })
-    }
-    const uploadResults = await Promise.all(
-      req.files.map((file) => streamUpload(file.buffer))
-    )
-    const urls = uploadResults.map((r) => r.secure_url)
-    res.json({ urls })
-  } catch (err) {
-    console.error('Upload failed:', err)
-    res.status(500).json({ message: 'Upload failed', error: err.message })
-  }
-})
-
-export default router
+export default createUploadRouter()

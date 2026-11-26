@@ -1,5 +1,6 @@
 import { getSmtpConfiguration } from './smtpTransport.js'
 import { getTrustedFrontendOrigin } from './contactRules.js'
+import { getR2Configuration } from '../services/imageStorage.js'
 
 const APPROVED_EMAIL = 'zawamuproperty@gmail.com'
 const isMailbox = value => typeof value === 'string' && value.length <= 254 && /^[^\s@<>]+@[^\s@<>]+\.[^\s@<>]+$/.test(value)
@@ -24,6 +25,7 @@ export function checkReleaseConfiguration(env = process.env) {
     typeof env.TRUST_PROXY_HOPS === 'string' && /^\d+$/.test(env.TRUST_PROXY_HOPS) && Number(env.TRUST_PROXY_HOPS) <= 10
   )
   checks.alert_opt_in = env.SAVED_SEARCH_ALERTS_ENABLED === undefined || ['true', 'false'].includes(env.SAVED_SEARCH_ALERTS_ENABLED)
+  checks.r2_image_storage_configuration = Boolean(getR2Configuration(env))
   return {
     configurationValid: Object.values(checks).every(Boolean),
     launchApproved: false,
@@ -33,6 +35,7 @@ export function checkReleaseConfiguration(env = process.env) {
     externalChecks: [
       'existing_owner_account_and_login',
       'smtp_delivery_and_domain_authentication',
+      'r2_upload_public_delivery_and_legacy_image_retirement',
       'proxy_chain_and_shared_abuse_controls',
       'deployed_origins_artifacts_and_backup_pair',
       'alert_worker_timer_and_delivery_unknown_review',

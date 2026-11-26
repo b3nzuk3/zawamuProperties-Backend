@@ -1,0 +1,842 @@
+{
+  "checkpoint": "2026-11-26 R2/application WebP local checkpoint",
+  "recordedAt": "2026-11-26T14:48:24.512888+00:00",
+  "scope": "Local code-only cutover, no provider/database/old-asset/account writes. Existing saved legacy URLs unchanged.",
+  "reviewStatus": {
+    "backendSpec": "PASS: deleg_f00d2add code/safety plus deleg_f9e66355 documentation/provenance closure",
+    "frontendSpec": "PASS: deleg_94d10cf1 contract/source plus deleg_f9e66355 documentation/provenance closure",
+    "integratedQuality": "PASS: deleg_bb64bfd4 approved repaired source, bindings and direct-path fixture; deleg_11e7e21a closed the sole stale active-plan wording hold. No remaining security/logic blockers."
+  },
+  "baseline": {
+    "backendTestsPassed": 152,
+    "frontendTestsPassed": 192,
+    "frontendFiles": 29,
+    "cleanWorktrees": true
+  },
+  "verification": {
+    "cleanNpmCi": {
+      "backend": 0,
+      "frontend": 0
+    },
+    "backendTestsPassed": 185,
+    "backendTestsFailed": 0,
+    "backendTestsSkipped": 0,
+    "frontendTestsPassed": 235,
+    "frontendFiles": 31,
+    "frontendTestsFailed": 0,
+    "frontendTypecheck": 0,
+    "frontendFullLint": 0,
+    "frontendBuild": 0,
+    "readinessCli": {
+      "command": "node scripts/check-release-readiness.mjs",
+      "fullyConfiguredFixtureExit": 0,
+      "fullyConfiguredFixtureConfigurationValid": true,
+      "launchApproved": false,
+      "missingR2SecretFixtureExit": 1,
+      "missingR2SecretFailedKey": "r2_image_storage_configuration",
+      "limits": "Explicit disposable environment values only; no database or provider contact."
+    },
+    "changedSyntaxLintWhitespace": {
+      "backend": {
+        "matchedSourceBindings": 75,
+        "changedCodePaths": [
+          "src/routes/upload.js",
+          "src/services/imageStorage.js",
+          "src/utils/imageOptimizer.js",
+          "src/utils/releaseReadiness.js",
+          "test/image-optimizer.test.js",
+          "test/image-storage.test.js",
+          "test/r2-loopback.test.js",
+          "test/release-readiness.test.js",
+          "test/upload.test.js"
+        ],
+        "checks": [
+          {
+            "command": [
+              "node",
+              "--check",
+              "src/routes/upload.js"
+            ],
+            "exit": 0,
+            "output": ""
+          },
+          {
+            "command": [
+              "node",
+              "--check",
+              "src/services/imageStorage.js"
+            ],
+            "exit": 0,
+            "output": ""
+          },
+          {
+            "command": [
+              "node",
+              "--check",
+              "src/utils/imageOptimizer.js"
+            ],
+            "exit": 0,
+            "output": ""
+          },
+          {
+            "command": [
+              "node",
+              "--check",
+              "src/utils/releaseReadiness.js"
+            ],
+            "exit": 0,
+            "output": ""
+          },
+          {
+            "command": [
+              "node",
+              "--check",
+              "test/image-optimizer.test.js"
+            ],
+            "exit": 0,
+            "output": ""
+          },
+          {
+            "command": [
+              "node",
+              "--check",
+              "test/image-storage.test.js"
+            ],
+            "exit": 0,
+            "output": ""
+          },
+          {
+            "command": [
+              "node",
+              "--check",
+              "test/r2-loopback.test.js"
+            ],
+            "exit": 0,
+            "output": ""
+          },
+          {
+            "command": [
+              "node",
+              "--check",
+              "test/release-readiness.test.js"
+            ],
+            "exit": 0,
+            "output": ""
+          },
+          {
+            "command": [
+              "node",
+              "--check",
+              "test/upload.test.js"
+            ],
+            "exit": 0,
+            "output": ""
+          },
+          {
+            "command": [
+              "git",
+              "diff",
+              "--check"
+            ],
+            "exit": 0,
+            "output": ""
+          }
+        ]
+      },
+      "frontend": {
+        "matchedSourceBindings": 157,
+        "changedCodePaths": [
+          "src/components/home/FeaturedListings.test.tsx",
+          "src/components/home/FeaturedListings.tsx",
+          "src/components/home/LatestBlog.tsx",
+          "src/components/ui/saved-searches-manager.test.tsx",
+          "src/components/ui/saved-searches-manager.tsx",
+          "src/lib/media.test.ts",
+          "src/lib/media.ts",
+          "src/pages/AdminProperties.test.tsx",
+          "src/pages/AdminProperties.tsx",
+          "src/pages/Blog.tsx",
+          "src/pages/BlogPost.tsx",
+          "src/pages/Listings.test.tsx",
+          "src/pages/Listings.tsx",
+          "src/pages/PropertyDetails.test.tsx",
+          "src/pages/PropertyDetails.tsx",
+          "src/test/media-consumers.test.tsx"
+        ],
+        "checks": [
+          {
+            "command": [
+              "npx",
+              "eslint",
+              "src/components/home/FeaturedListings.test.tsx",
+              "src/components/home/FeaturedListings.tsx",
+              "src/components/home/LatestBlog.tsx",
+              "src/components/ui/saved-searches-manager.test.tsx",
+              "src/components/ui/saved-searches-manager.tsx",
+              "src/lib/media.test.ts",
+              "src/lib/media.ts",
+              "src/pages/AdminProperties.test.tsx",
+              "src/pages/AdminProperties.tsx",
+              "src/pages/Blog.tsx",
+              "src/pages/BlogPost.tsx",
+              "src/pages/Listings.test.tsx",
+              "src/pages/Listings.tsx",
+              "src/pages/PropertyDetails.test.tsx",
+              "src/pages/PropertyDetails.tsx",
+              "src/test/media-consumers.test.tsx"
+            ],
+            "exit": 0,
+            "output": "npm notice run vite_react_shadcn_ts@0.0.0 npx\nnpm notice run 'eslint' src/components/home/FeaturedListings.test.tsx src/components/home/FeaturedListings.tsx src/components/home/LatestBlog.tsx src/components/ui/saved-searches-manager.test.tsx src/components/ui/saved-searches-manager.tsx src/lib/media.test.ts src/lib/media.ts src/pages/AdminProperties.test.tsx src/pages/AdminProperties.tsx src/pages/Blog.tsx src/pages/BlogPost.tsx src/pages/Listings.test.tsx src/pages/Listings.tsx src/pages/PropertyDetails.test.tsx src/pages/PropertyDetails.tsx src/test/media-consumers.test.tsx\n"
+          },
+          {
+            "command": [
+              "git",
+              "diff",
+              "--check"
+            ],
+            "exit": 0,
+            "output": ""
+          }
+        ]
+      }
+    },
+    "gates": {
+      "backend-tests": {
+        "command": [
+          "npm",
+          "test"
+        ],
+        "exit": 0,
+        "tail": [
+          "\u2139 tests 185",
+          "\u2139 suites 0",
+          "\u2139 pass 185",
+          "\u2139 fail 0",
+          "\u2139 cancelled 0",
+          "\u2139 skipped 0",
+          "\u2139 todo 0",
+          "\u2139 duration_ms 10967.50719",
+          "npm notice run estate-pro-server@1.0.0 test",
+          "npm notice run node --test test/*.test.js"
+        ]
+      },
+      "backend-audit": {
+        "command": [
+          "npm",
+          "audit",
+          "--json"
+        ],
+        "exit": 0,
+        "tail": [
+          "    \"dependencies\": {",
+          "      \"prod\": 150,",
+          "      \"dev\": 29,",
+          "      \"optional\": 28,",
+          "      \"peer\": 0,",
+          "      \"peerOptional\": 0,",
+          "      \"total\": 205",
+          "    }",
+          "  }",
+          "}"
+        ]
+      },
+      "backend-audit-production": {
+        "command": [
+          "npm",
+          "audit",
+          "--omit=dev",
+          "--json"
+        ],
+        "exit": 0,
+        "tail": [
+          "    \"dependencies\": {",
+          "      \"prod\": 150,",
+          "      \"dev\": 29,",
+          "      \"optional\": 28,",
+          "      \"peer\": 0,",
+          "      \"peerOptional\": 0,",
+          "      \"total\": 205",
+          "    }",
+          "  }",
+          "}"
+        ]
+      },
+      "frontend-tests": {
+        "command": [
+          "npm",
+          "test"
+        ],
+        "exit": 0,
+        "tail": [
+          "",
+          "",
+          " Test Files  31 passed (31)",
+          "      Tests  235 passed (235)",
+          "   Start at  17:24:23",
+          "   Duration  7.68s (environment 35%, tests 34%, transform 15%, setup 9%, import 7%)",
+          "",
+          "    Isolate  31 workers spawned \u00b7 ~1.32s startup each (spawn + environment, per file)",
+          "             at least ~460ms faster with isolate: false \u2014 reuses workers across files instead of one per file",
+          "",
+          "npm notice run vite_react_shadcn_ts@0.0.0 test",
+          "npm notice run vitest run"
+        ]
+      },
+      "frontend-typecheck": {
+        "command": [
+          "npm",
+          "run",
+          "typecheck"
+        ],
+        "exit": 0,
+        "tail": [
+          "npm notice run vite_react_shadcn_ts@0.0.0 typecheck",
+          "npm notice run npm run typecheck:node && npm run typecheck:app",
+          "npm notice run vite_react_shadcn_ts@0.0.0 typecheck:node",
+          "npm notice run tsc --noEmit -p tsconfig.node.json",
+          "npm notice run vite_react_shadcn_ts@0.0.0 typecheck:app",
+          "npm notice run tsc --noEmit -p tsconfig.app.json"
+        ]
+      },
+      "frontend-lint": {
+        "command": [
+          "npm",
+          "run",
+          "lint"
+        ],
+        "exit": 0,
+        "tail": [
+          "npm notice run vite_react_shadcn_ts@0.0.0 lint",
+          "npm notice run eslint ."
+        ]
+      },
+      "frontend-build": {
+        "command": [
+          "npm",
+          "run",
+          "build"
+        ],
+        "exit": 0,
+        "tail": [
+          "dist/index.html                         0.90 kB \u2502 gzip:   0.48 kB",
+          "dist/assets/hero-home-PPGA_2ZA.jpg    255.87 kB",
+          "dist/assets/index-B2WTXXqC.css        148.55 kB \u2502 gzip:  31.66 kB",
+          "dist/assets/index-CmJX2pXB.js       1,265.40 kB \u2502 gzip: 405.23 kB",
+          "\u2713 built in 5.61s",
+          "npm notice run vite_react_shadcn_ts@0.0.0 build",
+          "npm notice run vite build",
+          "",
+          "(!) Some chunks are larger than 500 kB after minification. Consider:",
+          "- Using dynamic import() to code-split the application",
+          "- Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks",
+          "- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit."
+        ]
+      },
+      "frontend-audit": {
+        "command": [
+          "npm",
+          "audit",
+          "--json"
+        ],
+        "exit": 0,
+        "tail": [
+          "      \"total\": 0",
+          "    },",
+          "    \"dependencies\": {",
+          "      \"prod\": 570,",
+          "      \"dev\": 260,",
+          "      \"optional\": 65,",
+          "      \"peer\": 3,",
+          "      \"peerOptional\": 0,",
+          "      \"total\": 833",
+          "    }",
+          "  }",
+          "}"
+        ]
+      },
+      "frontend-audit-production": {
+        "command": [
+          "npm",
+          "audit",
+          "--omit=dev",
+          "--json"
+        ],
+        "exit": 0,
+        "tail": [
+          "      \"total\": 0",
+          "    },",
+          "    \"dependencies\": {",
+          "      \"prod\": 570,",
+          "      \"dev\": 260,",
+          "      \"optional\": 65,",
+          "      \"peer\": 3,",
+          "      \"peerOptional\": 0,",
+          "      \"total\": 833",
+          "    }",
+          "  }",
+          "}"
+        ]
+      }
+    }
+  },
+  "browser": {
+    "passed": true,
+    "scenarioChecks": 19,
+    "localResponses": 80,
+    "consoleOrPageErrors": 0,
+    "viewportWidths": [
+      390,
+      1440
+    ],
+    "checks": [
+      {
+        "phase": "home-390",
+        "name": "featured property",
+        "variant": "card",
+        "naturalWidth": 768,
+        "naturalHeight": 512
+      },
+      {
+        "phase": "home-390",
+        "name": "latest blog",
+        "variant": "card",
+        "naturalWidth": 768,
+        "naturalHeight": 512
+      },
+      {
+        "phase": "listings-390",
+        "name": "listing card",
+        "variant": "card",
+        "naturalWidth": 768,
+        "naturalHeight": 512
+      },
+      {
+        "phase": "details-390",
+        "name": "property hero",
+        "variant": "card",
+        "naturalWidth": 768,
+        "naturalHeight": 512
+      },
+      {
+        "phase": "details-390",
+        "name": "gallery thumbnail",
+        "variant": "thumbnail",
+        "naturalWidth": 320,
+        "naturalHeight": 213
+      },
+      {
+        "phase": "blog-390",
+        "name": "blog card",
+        "variant": "card",
+        "naturalWidth": 768,
+        "naturalHeight": 512
+      },
+      {
+        "phase": "blog-390",
+        "name": "blog hero",
+        "variant": "large",
+        "naturalWidth": 1600,
+        "naturalHeight": 1067
+      },
+      {
+        "phase": "home-1440",
+        "name": "featured property",
+        "variant": "card",
+        "naturalWidth": 768,
+        "naturalHeight": 512
+      },
+      {
+        "phase": "home-1440",
+        "name": "latest blog",
+        "variant": "card",
+        "naturalWidth": 768,
+        "naturalHeight": 512
+      },
+      {
+        "phase": "listings-1440",
+        "name": "listing card",
+        "variant": "card",
+        "naturalWidth": 768,
+        "naturalHeight": 512
+      },
+      {
+        "phase": "details-1440",
+        "name": "property hero",
+        "variant": "large",
+        "naturalWidth": 1600,
+        "naturalHeight": 1067
+      },
+      {
+        "phase": "details-1440",
+        "name": "gallery thumbnail",
+        "variant": "thumbnail",
+        "naturalWidth": 320,
+        "naturalHeight": 213
+      },
+      {
+        "phase": "blog-1440",
+        "name": "blog card",
+        "variant": "card",
+        "naturalWidth": 768,
+        "naturalHeight": 512
+      },
+      {
+        "phase": "blog-1440",
+        "name": "blog hero",
+        "variant": "large",
+        "naturalWidth": 1600,
+        "naturalHeight": 1067
+      },
+      {
+        "phase": "admin-edit-upload",
+        "name": "admin table",
+        "variant": "thumbnail",
+        "naturalWidth": 320,
+        "naturalHeight": 213
+      },
+      {
+        "phase": "admin-edit-upload",
+        "name": "existing edit preview",
+        "variant": "thumbnail",
+        "naturalWidth": 320,
+        "naturalHeight": 213
+      },
+      {
+        "phase": "admin-edit-upload",
+        "name": "local preview unchanged"
+      },
+      {
+        "phase": "admin-edit-upload",
+        "name": "new upload after fixture save/reload",
+        "variant": "thumbnail",
+        "naturalWidth": 320,
+        "naturalHeight": 213
+      },
+      {
+        "phase": "admin-edit-upload",
+        "name": "canonical strings preserved through fixture PUT/reload; actual upload codecs/S3-double",
+        "objectCount": 9
+      }
+    ],
+    "fixtures": [
+      "catalogue/blog CRUD and auth profile are in-memory API fixtures; owner model is a method double",
+      "upload route, owner middleware, Sharp and React production bundle are real; S3 send is an in-memory object double",
+      "currency/fonts/remote stock images intercepted; no real provider/database access"
+    ],
+    "requestFailures": 0
+  },
+  "limits": [
+    "No actual R2 credentials, bucket/domain delivery, Cloudinary asset transfer/deletion/account cancellation or production Mongo persistence tested.",
+    "Browser catalogue/blog CRUD/auth-profile and owner model are explicit in-memory fixtures; browser upload uses real middleware/Sharp but S3 send double.",
+    "Versioned backend loopback test uses actual AWS SDK signed HTTP requests to an owned S3-wire fixture, not Cloudflare.",
+    "Frontend build emits a large-chunk warning and passes. No automatic orphan GC or successful-save media retention is added."
+  ],
+  "cleanup": {
+    "objectCount": 0,
+    "serverClosed": true
+  },
+  "staticScan": {
+    "backend": {
+      "checkedAddedCodeLines": 1840,
+      "dangerousPatternMatches": {
+        "shell_injection": 0,
+        "dynamic_eval": 0,
+        "unsafe_deserialization": 0,
+        "private_key": 0
+      },
+      "credentialReview": "No real credentials added; test secrets are explicitly named disposable fixture values. Backend credentials read only from environment; frontend public base only."
+    },
+    "frontend": {
+      "checkedAddedCodeLines": 398,
+      "dangerousPatternMatches": {
+        "shell_injection": 0,
+        "dynamic_eval": 0,
+        "unsafe_deserialization": 0,
+        "private_key": 0
+      },
+      "credentialReview": "No real credentials added; test secrets are explicitly named disposable fixture values. Backend credentials read only from environment; frontend public base only."
+    }
+  },
+  "executableInputs": {
+    "backend": {
+      "package-lock.json": "7a17f0e13a490d43fd517e4554f93f5886568063e5cb3fb9225994de494bff9d",
+      "package.json": "ab658ec703999792e2a11837fe14fd7bc8d5097bc46f566ed65e5ede598913a1",
+      "scripts/check-release-readiness.mjs": "4e0cf18e006988b9da143e0ed530b37c3647c589b7567e6a5fe7e384e74c4d81",
+      "scripts/run-saved-search-alerts.mjs": "e331b818981c2c91769dccf42f6f3a2c1f9c9b0605f5588d66c77d13972c32ff",
+      "scripts/verify-phase-a.mjs": "da7c0a777afa1d1507519b3dc048707bd4bc81a23d96f1dba0794349ae5d5052",
+      "src/app.js": "fa9e529844a273d5119a37963a4a9a5fd8ca2dc0a8b2dec38ebae794f66753b8",
+      "src/controllers/authController.js": "4ff845f00b6565494bfe5217f3b5e21e0caad1267e026584789da45c2bba6706",
+      "src/controllers/blogController.js": "d01707f227789cd808797ceec1042aef7a5fdafd7c80010cf5d102df6c8dd264",
+      "src/controllers/contactController.js": "6b19319a1351ec1627e7d6ec596a7897133f934041fd821961a8d4d477748d22",
+      "src/controllers/featuresController.js": "171a6c1d92d80a396ec7d9db521b50ab4405cc564e68155ad83c9cfce8cf68c7",
+      "src/controllers/propertiesController.js": "40358d87d6ac506a3e0978a1196aa155db0cb24beb12e9c1dfb6b9e0d362bd5e",
+      "src/controllers/savedSearchController.js": "362b4f3fa1a17b7acc4f3cd73f7470f58f802a6115e974ffb41dc4a29598666c",
+      "src/controllers/viewingController.js": "51d7ac68d768152e92be4cb417344ad838a8577b25c0fa02274571fc65cfa7a1",
+      "src/index.js": "a47f8727e992aa4433fcfedeabf28ae5207ee32a28bc8c2b9f981e27f60f221c",
+      "src/middleware/adminMiddleware.js": "fd86ed7b967bb564164cff87616ded059905b51a83e1c7021698bccba43c68ba",
+      "src/middleware/authMiddleware.js": "98803c318527d53c86edb5f4968631d75590ddf71d4e97f44839f358c8d15ed3",
+      "src/middleware/contactRateLimiter.js": "2005bc868526e4e497b3cef1b142d643c791c39908cbbf4bea219b15db9858ed",
+      "src/middleware/savedSearchAccess.js": "d9664db9d54dbd8dc11fa0ab90b029ad840e3557b95dac58bae372b119787b94",
+      "src/models/AlertDelivery.js": "743eb678a1d88c656c7f0dbe7d126cb301cb10f567495ff42374218d10cbbcbf",
+      "src/models/AlertLease.js": "c0aa92cc8e1ee76f18481e755e55321e33f2eda78504d29b178a7a78a03f4422",
+      "src/models/Blog.js": "b41b3996b830326161bd7e30b0dac46e31bfa63f3b5a15b36f76054134a0526c",
+      "src/models/Contact.js": "36a5159d2e27c18dae105bafd223677ebd96af1496155a1afa7f4cfd9d2b50d4",
+      "src/models/Feature.js": "20dafb7dff7361e3046bcb829a5ab9d1b24e1df0f38ad96b2040958945851213",
+      "src/models/Property.js": "adca35c96d4f85d0690418ea47d5982f17bed3f6011b2a45d245461c9c376763",
+      "src/models/SavedSearch.js": "8d7cf8651c63bb00b5ba36671ccf3c121185ff41b8668b366e9d31079db428c4",
+      "src/models/SavedSearchAccessLink.js": "0150174d4dedfa9b5e85e5f4ba9cf2261b953332d7f8e8f1a7c3507232a2060b",
+      "src/models/SavedSearchSession.js": "8ee847e9c601ad3b97033d5e246002eb785ffc28e54570adfdc11daec00d5e11",
+      "src/models/User.js": "313482bd4fca10b6333a67a480885aa2743c624e6014ce2b59b9438ddebf276f",
+      "src/models/ViewingRequest.js": "a7ac95f5764d97333034240a2623bc7fc7602d95c2f9aad6581e1f28d2536f96",
+      "src/routes/admin.js": "c62a2ab2cf03247db7f2d05968fa66c5323a05e665c4a78e6fd9b50632dcda93",
+      "src/routes/analytics.js": "77284e601fc26d41321d58aaefe2fcc7d1cc842c479e286f49860632e36d8a6d",
+      "src/routes/auth.js": "beeab2a0ac83131493daca061c2607f64342546906be9c3d31b7e767a728a1a3",
+      "src/routes/blog.js": "5a16c7f9c415e67a6d0558e6e272fa5270bcc4febde71cd1fe93f9aea9ba2336",
+      "src/routes/contact.js": "ff527e50c3d739fd14b7c60339a5543b30e8c60a23fe8376a3688e418406ade5",
+      "src/routes/features.js": "85c0c09642a3c1c57353c9c7769a4d646810eb814d128964949d29b94c3e25e0",
+      "src/routes/properties.js": "90ca46ec74c071d56d2f1af548248c92498179aef33ffe29627ad2806a68256e",
+      "src/routes/savedSearches.js": "d8aff286ae2810ca5e3a33f6fc2cb952f65cfacfe025faacd9e6154c883dbde4",
+      "src/routes/upload.js": "b179ae4cef36492742716006708a9200d1dd9df9ea03bff4882a0d5dc1531a7e",
+      "src/routes/viewing.js": "a77b4bfc9eeab38b8b79824e79085e34ac3de883b779b6c4fd584bc1f37df43a",
+      "src/services/imageStorage.js": "27a656a27c521aa8f5cb798681a9e974c5b68badc036a91afedfae8f7cd6e6fe",
+      "src/services/savedSearchAlerts.js": "8f57ef28958ea35a2dc8a9b14441cbae6acf921e83804889407011c97db61da8",
+      "src/utils/alertCadence.js": "5ecbb5cd70c2d3f2c88b47c72246319046a0b69432d7e87e671833de5bd0554c",
+      "src/utils/contactEmailService.js": "fb3e93cd55791e14095d65b70f38071680fb09f7a87c0197f75147dda3127c9f",
+      "src/utils/contactNotificationService.js": "c806f143d4c749c3e337ba012f0a4ddb33751529f1caf35a8a74ad6c1fa1f1ba",
+      "src/utils/contactRules.js": "962cbaa0c225adad865604e68e9ee439d30313c0c92cc09cd2068b2ac65293ce",
+      "src/utils/emailService.js": "a900179d0ba9bbc88562ae9a82df5f261e74154675dd369fa19177cca825b6ae",
+      "src/utils/featureRules.js": "8e024e7026cf263ff61e809333d28768eed7be929746369825cfbf39136320b8",
+      "src/utils/imageOptimizer.js": "c75eef28556e14c0ad81eaf03670a8671b780ac4df2d473b77d8ab0b6bcaf5ff",
+      "src/utils/ownerCapability.js": "d54048cb22a9a65efae21483d81effdc57980bf4211753ff65951c6e441f9647",
+      "src/utils/propertyRules.js": "c5f5b4c1ec51fd309ee5529b5d33fc60c81af4d84e4329bfa386f086370fa568",
+      "src/utils/releaseReadiness.js": "97c159666ee40785ffb42e95e6042b891c92843b63134ac885071209f9c1b197",
+      "src/utils/savedSearchAccessService.js": "83f6319e1a159ecfab25957ec16a0da69bd4d30fbd13a795023b87ead93842e2",
+      "src/utils/savedSearchRules.js": "a2eb31b2f68bdaa44e7c747d73bf8b171af9ebfbae0126b8d6321e4840311ad1",
+      "src/utils/smtpTransport.js": "0aee38499949cd1d6a00a48acf3f1290ae4726b487f69c4157b3e0baf85894fa",
+      "test/admin-access.test.js": "ce5b5d5950bddd43f5292c76272d75a4cb05de5d4b7ec19cdb9892defb1af2af",
+      "test/admin-stats.test.js": "2b1185faaf615ee3e725793c859936bc2788cb891b7ab3d6b781f393ee0177aa",
+      "test/alert-worker.test.js": "e4ba8cacb631e8760b81ac6ebb6ba1ae7775a6754aba58ffc25276ae6a6b7efa",
+      "test/app.test.js": "b38bc4865b5ddd1f5f12daf20f32fdbf9daf587c607e9e2473ac6048879c6db2",
+      "test/contact-api.test.js": "f81f95f040481401a573f7db4c46d4f7345c2be859ef93fdc1de1f8498fd1a02",
+      "test/contact-mail.test.js": "c26e0273aa1c10943b0fe979692b205c483cafc9b4b1c11c2153d2d1fb76c313",
+      "test/features-api.test.js": "063e29ebdbefa353f7bffc529c4473fdba0a391b2aa90e9737963701c742db99",
+      "test/helpers/http.js": "a4d4621bb289728c0d4c5ab373f0deca71f9c68598fad2b11fbce5d4e5358bd6",
+      "test/helpers/verifier-mongo-preload.js": "fdf0265003435decde56fbc8e81d9ad8f54fc008438093e0c6e3a53cbfbb9425",
+      "test/image-optimizer.test.js": "1b1ae356bc781a2b329c32d7815d76e9912ca54c92f4b167fbd91e7e740291c9",
+      "test/image-storage.test.js": "caddbe036f81db4569997968c7cdd02b01610c1182eee0239763d0766efe4a5c",
+      "test/properties-api.test.js": "de79a74307d7092e1cafb5dcffea8f8b2e9eb9c5c627399e7bb6ad4afdff9b00",
+      "test/property-rules.test.js": "a47ba6229c485f5f744d6612b55234063bfb91ee4dbf2e42a62d748ba991255a",
+      "test/r2-loopback.test.js": "a035b14bf740a0f1745fa69721d92e872c911e1b16db7a24eabe71394f3bc2bd",
+      "test/release-readiness.test.js": "dc620abcca60bdebb39b41c6b8a5bd06b4bdf7555919c73c69be6ad31f5f5437",
+      "test/saved-search-access.test.js": "6d3af68e4e9e1efec6cfa3ddcfa542256f6c55ada850f810989fd0ffaa3644ea",
+      "test/saved-search-dto.test.js": "086a4e65796fee8d7ad8885128cfbdb58d801b0c60a2cbe2d334c404b9002803",
+      "test/saved-search.test.js": "8b7987051524d84077b94a1c2692289e35196031e564b7bbae7803d36f572214",
+      "test/upload.test.js": "ae9cba66ee67f247e0b11f35cc14030dbedded8d8618a097ca8adceb7e65f994",
+      "test/verification-safety.test.js": "7dbe649e70ab8bca24a14b87ea6c9c59d9a2d764469f49e30ea801054480fec0",
+      "test/viewing-availability.test.js": "7f2d71030aeb01c716535a83e2ec3da00e8835c77693df5c320ba239b57680e6"
+    },
+    "frontend": {
+      "eslint.config.js": "5a016705c1d9758fd11687906bc6426983abc607d1462fd7915d5bbc5cec099f",
+      "index.html": "9d5ec8c9b94f66f8f9b85e2bf62fa0c1fe716842dce674c877684683ec24bf17",
+      "package-lock.json": "ca0bef9d61c676365217ed9135a24e7c70657d00f0cb35c3c3d2e466790e8e69",
+      "package.json": "c127cea8ad2b4c568d36f6af0f0ceb26196e662bd03b3f2f99d5a246e7777863",
+      "postcss.config.js": "190c877db466995bf1482f4a16abd06e04a89ede3119341e2a86ff96e1737b27",
+      "src/App.css": "a0715e0a09edbd0fbde65816a75e0fa0fc8b314c5260c0768c19bf3aac22621a",
+      "src/App.tsx": "8f2decfd95834d60e4a2e603b05c78854ff6bfde8158c7d0578c61b14771f4ef",
+      "src/TestMDXEditor.tsx": "3f848f141cd387ec6735fd55b982418e4ea6229490575c11a04ec11ed0eb5ba6",
+      "src/assets/hero-home.jpg": "e26879ec96311e3e216298322d7c6212634f2c3354e68ecfd501cd2cf2efa2be",
+      "src/components/auth/AdminRoute.tsx": "be8ccbcf42328323c6f3b2b7025ecfcdc474eee39f0fc5fbd4c53a0d0bacca32",
+      "src/components/contact/EnquiryForm.test.tsx": "0ba97cff88597e653a078e9cc2ec93b073afbdda3a5b485d26a05001e6dd2baa",
+      "src/components/contact/EnquiryForm.tsx": "1668a861948be9d353ba52dcd94126337b9b219e79c047fdf397fa78ff680d9c",
+      "src/components/home/FeaturedListings.test.tsx": "9f5aa80778f2f23da132c14a13495bf374240c1e0b2f379d5619d8acf14ffa97",
+      "src/components/home/FeaturedListings.tsx": "845064624d6e7b9e6302896bbb39aa1080736c050fcababe54a38de0edee890c",
+      "src/components/home/HeroSection.tsx": "0d887e965b1a81bdbfe0a1eeb8ce0b52271877c0db3675ac8daddac21cbfec3c",
+      "src/components/home/LatestBlog.tsx": "0cea248f2869ff013c9e2a1231f97c8b458ab5630ae3fdec445026c2954deea9",
+      "src/components/layout/Footer.tsx": "86c5839fa8d52d3fbb4e0f58df058557d453e8c485fc6e01c5654e2be0db946f",
+      "src/components/layout/Header.tsx": "b7bc9daee8718a9f1c0e688e084336038e5f1e28071a85477de0e1c48396e433",
+      "src/components/layout/Layout.tsx": "5affe1b42b3ef219a1fff9ff076c3c0d38363bb95e310493ea7efc325048857d",
+      "src/components/properties/FeatureSelect.test.tsx": "009b293f85ae3bde1b1b28d26ba40c0b0ecf66876d50ea79720dc3d04d8e8a6e",
+      "src/components/properties/FeatureSelect.tsx": "498f809eb02435543e3c24eb79f015b532f6ef5e3998e9408ae636df558aa93d",
+      "src/components/properties/PropertyBadges.test.tsx": "9259168ca9b3a8dd873f3ccc560bfd98f48d374fc3768a9c325526d64cbac991",
+      "src/components/properties/PropertyBadges.tsx": "e7f00e1bca62a10299e31229c5d5950b4acdb2f2226becd8b8aa95af0368c607",
+      "src/components/properties/PropertyCardActions.test.tsx": "b0c783cb046a210dfd38ec23375ff052b0a53f818ecfdc2fa8ca94bd9ed4d841",
+      "src/components/properties/PropertyCardActions.tsx": "14b3e5d6ae4253b83e7612e74af9145bfdd8989f9a281a319764f3ca15d20497",
+      "src/components/properties/PropertyFields.test.tsx": "33bd91d9bbe2e03b5b71cc8a162f1809b6b899cd01d4372f2a5b1236a1cb7c81",
+      "src/components/properties/PropertyFields.tsx": "d9e01661101f0fd6661c27f4010ce5c7ff8f8b74d50f852b70186ef3f3fdea7a",
+      "src/components/properties/PropertyPrice.test.tsx": "443f7f84fe7b7a2ba19a482b586a9b475d79b402363893165ea9849152a844a8",
+      "src/components/properties/PropertyPrice.tsx": "f3817d95d40e635daf51a1655de1d94427f782f146774bcf9e16e943f1ba7e50",
+      "src/components/properties/WhatsAppButton.test.tsx": "c99d878d0dc8fb9db9aaeed925a63fc2e279d87f652fcaf108a0370ad8ad65c1",
+      "src/components/properties/WhatsAppButton.tsx": "434035b5a8130e535da2efb833d7ae3258d3b1af2657ead17b5f10e6a972d08e",
+      "src/components/ui/accordion.tsx": "6b84cb28b5c8e2129d854cffb8c5ba0161758d577db6db30a380cf593a8c0705",
+      "src/components/ui/alert-dialog.tsx": "8790a36af5fd1ef38d9d5b8ce1249e382517dcde323b2ec1bc26b2c907a2177e",
+      "src/components/ui/alert.tsx": "ed78a053a9db783f48d5dfab7398b630f87c17ed2e237b6f30a3eb153675960c",
+      "src/components/ui/aspect-ratio.tsx": "08b0aa0b05efc573c7d63363c03e83d4b101bfeb54140764e96ddea30659cfcc",
+      "src/components/ui/avatar.tsx": "fb33bc4865b74d1f0239b1782dbdc4cc2d38690ba6e245e9e3b024c256b14c2b",
+      "src/components/ui/badge.tsx": "bf2fc2d4eb66a33bc4cf32c0fe5c6251255c9f77c3c01d7fb17912902cf8f663",
+      "src/components/ui/breadcrumb.tsx": "abb80a6662087bdb01a70e731bd4e140bc37ae45c4ca39c268e1327cec3aedcf",
+      "src/components/ui/button-variants.ts": "690e9fab49ce0958928e2b7d1939461db295cf98fdec1014e28e9ebeb40f34e4",
+      "src/components/ui/button.tsx": "803c72aca70a81484d37419546f4bbbb8efd26145d0ede19e7556bd3bbd5f3e3",
+      "src/components/ui/calendar.tsx": "519bb04cc6bfbee55cb7a9dc84bf1f8f19395f5b563ec2d3d86efdf8489ec8d9",
+      "src/components/ui/card.tsx": "8bad317eca5b74899d868688a339a16f54995e36810c0fdfe214c057755535e0",
+      "src/components/ui/carousel.tsx": "5a4ff73c804e86c873382da80c453f1399006326ef042fb984c24162ec86666e",
+      "src/components/ui/chart.tsx": "f5165c9a1c2a74597731eb620208406bef38a86735c376f2c4c09073f40643c4",
+      "src/components/ui/checkbox.tsx": "60a0084cbdfcb96e54c9f6438e9066dfe7ed0a7e421b33985d5eb57975d110a4",
+      "src/components/ui/collapsible.tsx": "6f5be8ba164c177759bf63cc25ad4d49391f162f6784ba624d72e5d5c0c0dde2",
+      "src/components/ui/command.tsx": "ec99d91e0022b78dfa8e8404394ca4fdc7618b635f209afacc1920d58805170a",
+      "src/components/ui/context-menu.tsx": "83de8ae175e3a154960abf1bc92e1032d13e42b02b4aa4469929fa46cdec42a4",
+      "src/components/ui/currency-converter.tsx": "c772bfd67b7f7808d6b31a96837b92ebdffab8661657abda0c8d1662437401c0",
+      "src/components/ui/dialog.tsx": "27f3faad6d4ef2168889c0ed091db17a8c49ed7e1f5a2b3e83aa6f1725770c21",
+      "src/components/ui/drawer.tsx": "47ff6248307a4ac09bf7e00181a2a29f9f846691092e04cad03e15d749bc249b",
+      "src/components/ui/dropdown-menu.tsx": "042132f5ee2e5297488441fc7bd0e343393e3150be516110a8e3337196515b61",
+      "src/components/ui/dual-currency-price.tsx": "e6c2d0f9fae6bb2292d35d2159b2bd50c3fc1c105cd971ab380c903e020893be",
+      "src/components/ui/form.tsx": "a9ff7cdfe5517cdd30c21a7416b1cb51a9a9669782a87868f7795e249213d22c",
+      "src/components/ui/hover-card.tsx": "f877605d6ca646301df880f38796980bd62594cd3d0089c689e17399fbf0cb14",
+      "src/components/ui/inline-currency-converter.tsx": "18e56cae40f40d81bcbf3a1cc6fd24d259bd1a8467cff77cf40ef147f41a3b47",
+      "src/components/ui/input-otp.tsx": "b06b6294edee39d817586b3cf4766de1720b06e184624d45d2bfd0f38d2a5e72",
+      "src/components/ui/input.tsx": "b326e2af874b14aa2ac18096ddbec512c6258f3fafc20ba6c8262818d48e6a5b",
+      "src/components/ui/label.tsx": "e69cfc27d78c9ef31b248ab8ea4fa54327c1038843f70efb5cd85d54c0bf1e0e",
+      "src/components/ui/location-selector.tsx": "bd13dfaab04980fa23d15f352ed7b386f3f06c391c96b7da1e0ea1f532be9181",
+      "src/components/ui/menubar.tsx": "dcf6ae1f54565c610fa5c80ed58550fe28e75c236592d21e655da1357ef10e5a",
+      "src/components/ui/navigation-menu.tsx": "30ab3622a717f943925f820eac77f231f6d414bc857d223679b34a14984500bd",
+      "src/components/ui/pagination.tsx": "bdbe6625ff844726d1972212cf7b26534118f686b43c5e48060131243763f9a4",
+      "src/components/ui/popover.tsx": "d86882a36b2b0f92a0031f20814f6b9137b5ca484816776495ffb763fd5b0219",
+      "src/components/ui/progress.tsx": "fd25bcba572b7c28af99c6a61af8a92d74bec9811872883c7fb0f67884182b71",
+      "src/components/ui/radio-group.tsx": "74f87531da1fde8d3c07dbd7b380ee6508a70d5c0af1c22e2d2c33d66cc79f10",
+      "src/components/ui/resizable.tsx": "be7df63b7584141a34dcf86648e2528bbd56125661ef0f31850bb961a8e6f9a3",
+      "src/components/ui/save-search-modal.test.tsx": "d305a28a40d84dd9b1c385db659b82a21a5732842421af091e97824a1950bb80",
+      "src/components/ui/save-search-modal.tsx": "7c7cb79dbf72f83b09b9dbc7d2590916646c519a67e2d738ba2d76119c35f5ef",
+      "src/components/ui/saved-searches-manager.test.tsx": "a9fdf40095d57ae9da1400158fe4d7f3d38c706def0560773b7a1ccfe966067a",
+      "src/components/ui/saved-searches-manager.tsx": "71af403b53e6696f41ad1fc1ace08c7344ca5542fe57a24c6859dca4b8d24475",
+      "src/components/ui/schedule-viewing-modal.test.tsx": "353b0fd59572b871c23d81b29e580ae40cd6f1eed0188461075ed2e441a302a5",
+      "src/components/ui/schedule-viewing-modal.tsx": "3a11b2591b4d7d4256ed47f39447a1309e834380f9aa70dd0232c52c499f388a",
+      "src/components/ui/scroll-area.tsx": "d7d02600effca55d0dcadce8c09c97ebddda3a19c5fa1d52dc9f6f727b26c6b1",
+      "src/components/ui/select.tsx": "779226bcf9db1de4b1337647d517555c0584d5492c932f420e18688bf0c0aab4",
+      "src/components/ui/separator.tsx": "c956c4cca4b8442fa9314d6079b9f975e1ee39d5804aaf2966990f6258ac342a",
+      "src/components/ui/sheet.tsx": "a4292e4b2ab39bd9c1149523543244453ba931161c78dd2474a31590f131102c",
+      "src/components/ui/sidebar.tsx": "8ce115b32573ec9b03c4528e7c2180843a2479f1194f888954610fc74a3bcd50",
+      "src/components/ui/skeleton.tsx": "a72a9d8fc1c1999b5411a33391c5e70048863c5865629077280e943ca85689a8",
+      "src/components/ui/slider.tsx": "61e959d046f72e295d73a822b9afc7cc87ec6d1007905f2572e6117d7b2067b6",
+      "src/components/ui/sonner.tsx": "f93091b355ef5bea646755da13b6f8b87df1be2da4cb0679fe123be99d3d5f04",
+      "src/components/ui/switch.tsx": "bd29ce723e952bc7f8fab367320347ca82fbb933f4da9872c7120d6765662ebe",
+      "src/components/ui/table.tsx": "1da243956282c040db49d5718d2f0093a705fbbdfa3a25f51c1a31a069c45093",
+      "src/components/ui/tabs.tsx": "d9958fd005db42bcca4f2c12ede63500e74f1a9bd82ddc3a6bf6fcb369706f07",
+      "src/components/ui/textarea.tsx": "1dcb6000137f7e75e534e6a7d49a3fb65b9ba84d553c261970c503b17e216ccb",
+      "src/components/ui/toast.tsx": "99f9f4a3e897f71d89b01c6772b2f5db51b888cecb2c8214fb2c2dbb2b3e6356",
+      "src/components/ui/toaster.tsx": "1348f1a1f9820e2f1394b93cecc156a7e22f03636ab9270753985549aae2be74",
+      "src/components/ui/toggle-group.tsx": "0b4a677afbca5ec39dfff8aac2b942cd064fa24d8314f777284e7d35dd854c0d",
+      "src/components/ui/toggle-variants.ts": "264b19d66598720d1afd7074bbe9b7dcf298b87c228acb5947960a8e531791c9",
+      "src/components/ui/toggle.tsx": "54d7ee15f4f4f8a9ba79dac0cddd180cedfc5331deead86f7550fe3a3937adae",
+      "src/components/ui/tooltip.tsx": "955e81c757a7cf51e1dc591d663c797b5ef8f0bb5fcc26778ca673e2284686cd",
+      "src/components/ui/use-toast.ts": "d48c4c490e5101aa42ceed9b8ca49642d66152ba11daf7ee6c29bee0f5172c37",
+      "src/hooks/authContext.ts": "6b884d31f69a1156bdc441c3a2b2200bc916495deba83c0f9f240efcf8174b56",
+      "src/hooks/use-mobile.tsx": "ad0936f84f1df79d3697bfbff9c18f8ad58431c1cbaf2359c6a853b0fcc9f28b",
+      "src/hooks/use-toast.ts": "5aab0623ee24bddf9420c259a23a06996292e38ea70eccbac2715516f6d01a0b",
+      "src/hooks/useAuth.tsx": "3d7a788aa31bf5a468f88f7f846bc46a87cac81de166561a050fe8e7a945884e",
+      "src/hooks/useAuthContext.ts": "1d0308599b4cbd635085c0915964721cfbd2d9ff160f7f6f37a2f8735e35fb57",
+      "src/hooks/useCurrencyConverter.tsx": "bbc7f749b56fdb8c9585adb6766064641da70ec05e1e4cb91dc973417caa3d68",
+      "src/index.css": "c0418492b0bae62dcb0f2329a2972a18f051a0f1fafd1a3bec2940a5e78e0a05",
+      "src/lib/api.js": "2f37b5fa6f9195030ab9330063fc32a916060ecc8eaeda9bff79cf5bd628b5c9",
+      "src/lib/companyContact.test.ts": "84e9b7506729f2e4926f51459121eda8a5bca33fbc9f05aeb14b44103e0597b8",
+      "src/lib/companyContact.ts": "277d90f2f29ea15ac9b7f2c81e0c8396779cca9cf25cc6b325fde2b906eba765",
+      "src/lib/featureFlags.ts": "991b35a9fc06c525fab8d93389f9a7fcd08555594108ffb034a05e88e4258690",
+      "src/lib/media.test.ts": "bbd223e51454bbcaa8bd3ce21b2fd5def044db3c260b2f44f0aadd3ba3380f6d",
+      "src/lib/media.ts": "c3539870d1aef587b7211048a4972eb60aa5e41a76712b05eb0a101a1e77dc1a",
+      "src/lib/property.test.ts": "80bde495192d9ded2e263cc9245ed03b8fb4ebc7917788271586ff51dbc4d8d0",
+      "src/lib/property.ts": "2382c6ec311e2240145b92c56b0e28dea38fee74475e46b6a8cbadbe6be2ae91",
+      "src/lib/savedSearch.test.ts": "ceea21b90d4b6b8c0bab591ff0a0321276641de70b0c4b66a47aa8d120e74193",
+      "src/lib/savedSearch.ts": "421b1639e55fb6ec99e4c01e28899d40f3a674ba66f9d3b4b0c16b824960e443",
+      "src/lib/savedSearchApi.test.ts": "1d1912c72452fdfaee32c0f8bf9d00cbacdc9e3fd018928731f7bfa017fc6e81",
+      "src/lib/savedSearchApi.ts": "0ad41733e22d97668bd27ff07dda6d0e260c40dd7191063604a6d17f7872492a",
+      "src/lib/utils.ts": "7c8c3dfc0cdd370d44932828eb067ef771c8fe7996693221d5d4b90af6d54f2d",
+      "src/lib/whatsapp.test.ts": "394f81dcdc47e90e8aa0c6c90a29c86f266f3bf40202e7da8a6266655021c7bc",
+      "src/lib/whatsapp.ts": "ac5ffc8060a57a01bb64367e646b10ae2817b0c3dde2122f5f7a95fc6f84585e",
+      "src/main.tsx": "2b457645d3a334e437368b113a2f5574207651da7a1b145e770c334bef8d342f",
+      "src/pages/About.tsx": "24bb7670e288b62cc88fb719a91d7027b89baa6d1e798bae21095261d2ea2f10",
+      "src/pages/Admin.property-form.test.tsx": "8bdab989e3e7275b42f8fc4554709b02f007a09f15b2ea79c5b15e0ce2dcceb2",
+      "src/pages/Admin.test.tsx": "a036bccdd91eeafc34563158d33f69b4ec262600be87c6e9a324d0c8199dae16",
+      "src/pages/Admin.tsx": "762b89a2c1b93268aa3c9c3705005be5fd8d87bc416d9493e6c2d136fa20bd43",
+      "src/pages/AdminAnalytics.tsx": "47b5722084f381c2671f03ccc9e0c5654c5081bc2d1e5a4fb7b93677f7b21e2e",
+      "src/pages/AdminBlog.tsx": "ff5595f50fa37d8b24afea0bfa78a3ea4912e68b1cf323d75c5ba47453277fb5",
+      "src/pages/AdminEnquiries.test.tsx": "40d841703de1d05b8c385cdb2c328c3bde00c680e0ee4688836fe9ce0e2046cf",
+      "src/pages/AdminEnquiries.tsx": "470f70609b5d8b37b179576bbcfdab936566a40d5514b2ee568826053e6b4890",
+      "src/pages/AdminProperties.test.tsx": "d57d58e76d3bb506e80753f10cf10c7ea56c284c96f24812cdab708f4ad0e57d",
+      "src/pages/AdminProperties.tsx": "11b834c08f6ea69541e42777ff4a52bbe3f381c2b3b761fe4a160838dabcd7eb",
+      "src/pages/AdminSettings.tsx": "f6b3f07c5c2673124f07133ae478fe01d137c4ee78001422c76b8c25d74a8b7c",
+      "src/pages/AdminViewingRequests.tsx": "cfe24bc38406d3234d689390e020184d4aa729b046e347aec60c31baa8587d3c",
+      "src/pages/Blog.tsx": "fd64db8ab780f8b8320dfdd90699c36a18acc619d22a2f8d2bcb72d4a164d192",
+      "src/pages/BlogPost.tsx": "b86783733a9b76634c1476f0fd0c7381e57bf25d23cd807612f2f720172172fb",
+      "src/pages/Contact.test.tsx": "cd74c609993d47bc1da7ecfdd0fcceda11cac6eb1ccf490cd487801cf04331c1",
+      "src/pages/Contact.tsx": "12fbc982b7363c4ba8d54b5604340568a0756c416e0db465eb6e71deba697f88",
+      "src/pages/CurrencyConverter.tsx": "eb0d5af96c2b04fc2703a484780b6865fead3996b6cfa7e4164b7d1c5f56024a",
+      "src/pages/Index.tsx": "086c22ff60ccd357af1201e006c19058c5424fd180f1d3b59e2703ee2261c0d3",
+      "src/pages/Listings.test.tsx": "56b6d4c311726053fec7b734c4a14b289d49949f4349005531d95a845a396e17",
+      "src/pages/Listings.tsx": "dbb83355a84f8803091802b7a954c7e99ff0e9b20aec8ce7a089c4a2a8633982",
+      "src/pages/Login.tsx": "cea80a10a06e4255c4e7bec50514912908a0ac159d486e78fa408357a6df1e59",
+      "src/pages/NotFound.tsx": "668da60909eec067682c380fd7b25669f47dd1e8beef159499f3fec1c21b353a",
+      "src/pages/PropertyDetails.test.tsx": "7abbb15d2022a213d5ff5ea710e1d1bcf842cc9979cc4a97d98671cff70dbd6d",
+      "src/pages/PropertyDetails.tsx": "5eb95d10e02a5a4f89198306361d2a30ac9bf81a82ece5ae00fb99a32a5a4fa3",
+      "src/pages/UserDashboard.test.tsx": "b7784bbe33fd62cf1831020bbb9d567c6a1762770a2ca856bed8116f3045b68f",
+      "src/pages/UserDashboard.tsx": "3103b2f0fd4c71028c933e3ab7c3b961732abb1ba7d9ecafd88cbf9e7f83ecbb",
+      "src/test/admin-access.test.tsx": "604da1b443889b80c5c60f9bc470c7b7ee3995bdf8ea69af355eecc1d8a0c946",
+      "src/test/app-routes.test.tsx": "f216a12a152a31d019fdfab3b962b038b324544e0a9042e88463c93d2868f3e1",
+      "src/test/auth.test.tsx": "f267b5c9539dd7dc39ad733f832675b485e7cb7e207a65f3477feec9f1044b61",
+      "src/test/media-consumers.test.tsx": "d48d131804d32c605b7fcd4723385952a44d9625b9441f4cb588d651bd988a76",
+      "src/test/navigation.test.tsx": "810a2fd135c29a45931ecb0113faec22617df828762065f3afd5ac0d26eb8434",
+      "src/test/setup.ts": "037fd752ab500c4ed683287f2f13776d84da3a2dd9ea5cfc6e53457549eb3bf4",
+      "src/test/smoke.test.tsx": "78b771ab9a8bf33e82857956244742a93d3fb54c656542a67bc1c86528eac039",
+      "src/types/contact.ts": "66c760eae63c5f7bb896702e47e2fd42ef9515bd3688f3a87d18f5e6509c3245",
+      "src/types/property.ts": "c355ec6dce2818cd0799a12e650d7580e57373f87ea86aa3454192fdd81410d7",
+      "src/vite-env.d.ts": "65996936fbb042915f7b74a200fcdde7e410f32a669b1ab9597cfaa4b0faddb5",
+      "tailwind.config.ts": "4d05bf97932e7ac8d34436ae32b50af2ec98021a70597fcc4d5efe92516a62c8",
+      "tsconfig.app.json": "3d44641a0151484d5adb5c764a4766a8e31076d2fd557dbe8c6e1c87863058f7",
+      "tsconfig.json": "1914430cf76f7e28628f4a14b7b09e256f5ac5263e816c63691b08cf083994a8",
+      "tsconfig.node.json": "9502a2666a5322d8db0cf075ac5e473167f12820ec099660f455d057420caeba",
+      "vite.config.ts": "4acf7d0f28f82bef3fd6999dfcd1cccadcd2fb0ff341c7bcf8ed22d4e024a567",
+      "vitest.config.ts": "1271c26363fc8a4fe7679a35ed391c393008c69d7709b61d2a35d692c69f97fe"
+    }
+  },
+  "localVerifierArchive": {
+    "runtime.mjs": {
+      "sha256": "583f8e61fd5c999891346fce178eb3657807928e543a71fe19275acb1861bbac",
+      "source": "import fs from 'node:fs/promises'\nimport http from 'node:http'\nimport https from 'node:https'\nimport path from 'node:path'\nimport { once } from 'node:events'\nimport { pathToFileURL } from 'node:url'\nimport { createRequire } from 'node:module'\n\nconst root = process.cwd()\nconst backend = path.join(root, 'backend')\nconst frontend = path.join(root, 'frontend')\nconst load = p => import(pathToFileURL(path.join(backend, p)))\nconst require = createRequire(path.join(backend, 'package.json'))\nconst express = require('express')\nconst sharp = require('sharp')\nconst jwt = require('jsonwebtoken')\nconst { createImageStorage } = await load('src/services/imageStorage.js')\nconst { createUploadRouter } = await load('src/routes/upload.js')\nconst { default: User } = await load('src/models/User.js')\n\nprocess.env.ADMIN_EMAILS = 'owner@example.test'\nprocess.env.JWT_SECRET = 'disposable-browser-fixture-only'\n// Explicit model-method fixture, never connect to MongoDB or load .env.\nUser.findById = async () => ({ _id: 'actor', email: 'owner@example.test' })\nconst objects = new Map()\nconst events = []\nlet properties = []\nlet posts = []\nlet storage\nconst app = express()\nconst server = https.createServer({ key: await fs.readFile(path.join(root, 'fixture-key.pem')), cert: await fs.readFile(path.join(root, 'fixture-cert.pem')) }, app)\nserver.listen(Number(process.env.FIXTURE_PORT ?? 0), '127.0.0.1')\nawait once(server, 'listening')\nconst origin = `https://127.0.0.1:${server.address().port}`\nconst mediaBase = `${origin}/media`\nconst env = { R2_ACCOUNT_ID: 'a'.repeat(32), R2_ACCESS_KEY_ID: 'fixture-access', R2_SECRET_ACCESS_KEY: 'fixture-secret', R2_BUCKET_NAME: 'fixture-images', R2_PUBLIC_URL: mediaBase }\nconst client = { async send(command) {\n  const { Key, Body, ContentType, CacheControl } = command.input\n  if (command.constructor.name === 'PutObjectCommand') objects.set(Key, { body: Body, type: ContentType, cache: CacheControl })\n  else if (command.constructor.name === 'DeleteObjectCommand') objects.delete(Key)\n  else throw new Error('Unexpected fixture storage command')\n  return {}\n} }\nstorage = createImageStorage({ env, client })\nconst input = await sharp({ create: { width: 1800, height: 1200, channels: 4, background: '#178963' } }).png().toBuffer()\nawait fs.writeFile(path.join(root, 'fixture-input.png'), input)\nconst initial = await storage.uploadImages([{ buffer: input }, { buffer: input }])\nproperties = [{ _id: '64b000000000000000000001', title: 'R2 fixture home', description: 'Disposable browser media verification fixture; not real inventory.', location: 'Nairobi', type: 'Apartment', listingPurpose: 'rent', availability: 'available', price: 50000, offerPercent: 10, effectivePrice: 45000, bedrooms: 2, bathrooms: 2, area: 800, features: ['Balcony'], featured: true, images: initial.urls }]\nposts = [{ _id: '64b000000000000000000002', title: 'R2 fixture article', content: 'Disposable browser fixture article.', image: initial.urls[0], author: 'Fixture', category: 'Market', date: '2026-11-26', readTime: '2 min read', featured: true }]\nconst token = jwt.sign({ userId: 'actor' }, process.env.JWT_SECRET)\napp.use((req, res, next) => {\n  const requestPath = req.path\n  res.on('finish', () => events.push({ method: req.method, path: requestPath, status: res.statusCode }))\n  next()\n})\napp.get('/media/*', (req, res) => {\n  // Match a direct R2 custom domain: the entire public path is the object key.\n  const object = objects.get(req.path.slice(1))\n  if (!object) return res.sendStatus(404)\n  res.set({ 'Content-Type': object.type, 'Cache-Control': object.cache }).send(object.body)\n})\napp.get('/fixture/bootstrap', (_req, res) => res.json({ token }))\napp.get('/fixture/events', (_req, res) => res.json({ events, objectCount: objects.size, images: properties[0].images }))\napp.use('/api/upload', createUploadRouter({ storeImages: files => storage.uploadImages(files) }))\napp.use(express.json())\napp.get('/api/auth/profile', (_req, res) => res.json({ id: 'actor', name: 'Fixture Owner', email: 'owner@example.test', isAdmin: true }))\napp.get('/api/properties', (_req, res) => res.json(properties))\napp.get('/api/properties/:id', (req, res) => {\n  const property = properties.find(p => p._id === req.params.id)\n  return property ? res.json(property) : res.sendStatus(404)\n})\napp.put('/api/properties/:id', (req, res) => {\n  const i = properties.findIndex(p => p._id === req.params.id)\n  if (i < 0) return res.sendStatus(404)\n  properties[i] = { ...properties[i], ...req.body }\n  res.json(properties[i])\n})\napp.get('/api/features', (_req, res) => res.json([{ _id: '64b000000000000000000003', name: 'Balcony' }]))\napp.get('/api/blog', (_req, res) => res.json(posts))\napp.get('/api/blog/:id', (req, res) => res.json(posts.find(p => p._id === req.params.id)))\napp.get('/api/admin/stats', (_req, res) => res.json({ totals: { properties: 1, activeListings: 1, blogPosts: 1, inquiries: 0 }, monthOverMonth: { properties: 0, activeListings: 0, blogPosts: 0, inquiries: 0 } }))\napp.get('/api/admin/recent-activity', (_req, res) => res.json([]))\napp.use('/api', (_req, res) => res.status(404).json({ message: 'Unknown fixture API' }))\napp.use(express.static(path.join(frontend, 'dist')))\napp.get('*', (_req, res) => res.sendFile(path.join(frontend, 'dist/index.html')))\nawait fs.writeFile(path.join(root, 'runtime.json'), JSON.stringify({ origin, mediaBase, propertyId: properties[0]._id, postId: posts[0]._id }))\nconsole.log('Owned HTTPS browser fixture ready')\nlet stopping = false\nasync function cleanup() {\n  if (stopping) return\n  stopping = true\n  objects.clear()\n  await new Promise(resolve => { server.close(resolve); server.closeAllConnections() })\n  await fs.writeFile(path.join(root, 'cleanup.json'), JSON.stringify({ objectCount: objects.size, serverClosed: !server.listening }))\n}\nfor (const signal of ['SIGINT', 'SIGTERM']) process.once(signal, () => cleanup().then(() => process.exit(0)))\n",
+      "executionRoot": "owned scratch directory containing clean backend/frontend snapshots; runtime uses a generated disposable TLS key/cert, not included"
+    },
+    "browser.mjs": {
+      "sha256": "3e4918c4738663467764d30ea636a0436ba0548b144069155f2cf9bb2bd8db96",
+      "source": "import fs from 'node:fs/promises'\nimport assert from 'node:assert/strict'\nimport { chromium } from 'playwright'\n\nconst root = process.cwd()\nconst config = JSON.parse(await fs.readFile('runtime.json', 'utf8'))\nconst browser = await chromium.launch({ executablePath: '/usr/sbin/chromium', headless: true, args: ['--no-sandbox'] })\nconst context = await browser.newContext({ ignoreHTTPSErrors: true })\nconst page = await context.newPage()\nconst checks = []\nconst errors = []\nconst requests = []\nconst externalFixtures = []\nconst fixturePng = await fs.readFile('fixture-input.png')\nlet phase = 'setup'\npage.on('pageerror', error => errors.push({ phase, type: 'pageerror', message: error.message }))\npage.on('console', message => { if (message.type() === 'error') errors.push({ phase, type: 'console', message: message.text() }) })\npage.on('response', response => { if (response.url().startsWith(config.origin)) requests.push({ phase, method: response.request().method(), path: new URL(response.url()).pathname, status: response.status() }) })\nawait context.route('**/*', async route => {\n  const req = route.request()\n  if (req.url().startsWith(config.origin + '/')) return route.continue()\n  externalFixtures.push({ type: req.resourceType(), origin: new URL(req.url()).origin })\n  if (req.url().includes('exchangerate-api.com')) return route.fulfill({ contentType: 'application/json', body: JSON.stringify({ rates: { USD: 1, KES: 130 }, base: 'USD' }) })\n  if (req.resourceType() === 'stylesheet') return route.fulfill({ contentType: 'text/css', body: '' })\n  if (req.resourceType() === 'image') return route.fulfill({ contentType: 'image/png', body: fixturePng })\n  throw new Error(`Unexpected external request ${req.resourceType()}`)\n})\nasync function checkImage(locator, variant, name) {\n  await locator.waitFor({ state: 'visible' })\n  await locator.evaluate(image => image.decode())\n  const state = await locator.evaluate(image => ({ current: image.currentSrc, src: image.getAttribute('src'), width: image.naturalWidth, height: image.naturalHeight, complete: image.complete }))\n  assert.ok(state.current.startsWith(config.mediaBase + '/images/v1/'), `${name}: owned URL`)\n  assert.ok(state.current.endsWith(`/${variant}.webp`), `${name}: ${state.current}`)\n  assert.equal(state.complete, true)\n  assert.ok(state.width > 0 && state.height > 0)\n  checks.push({ phase, name, variant, naturalWidth: state.width, naturalHeight: state.height })\n}\ntry {\n  for (const width of [390, 1440]) {\n    await page.setViewportSize({ width, height: 950 })\n    phase = `home-${width}`\n    await page.goto(config.origin, { waitUntil: 'networkidle' })\n    await checkImage(page.getByRole('img', { name: 'R2 fixture home', exact: true }), 'card', 'featured property')\n    await checkImage(page.getByRole('img', { name: 'R2 fixture article', exact: true }), 'card', 'latest blog')\n    phase = `listings-${width}`\n    await page.goto(config.origin + '/listings', { waitUntil: 'networkidle' })\n    await checkImage(page.getByRole('img', { name: 'R2 fixture home', exact: true }), 'card', 'listing card')\n    await page.getByRole('link', { name: 'View Details: R2 fixture home', exact: true }).click()\n    await page.waitForURL(`**/listings/${config.propertyId}`)\n    await page.getByRole('heading', { name: 'Description', exact: true }).waitFor()\n    phase = `details-${width}`\n    await checkImage(page.getByRole('img', { name: 'R2 fixture home', exact: true }), width < 768 ? 'card' : 'large', 'property hero')\n    await checkImage(page.getByRole('img', { name: 'R2 fixture home 2', exact: true }), 'thumbnail', 'gallery thumbnail')\n    await page.evaluate(() => window.scrollTo(0, 0))\n    await page.screenshot({ path: `property-${width}.png`, fullPage: false })\n    phase = `blog-${width}`\n    await page.goto(config.origin + '/blog', { waitUntil: 'networkidle' })\n    await checkImage(page.getByRole('img', { name: 'R2 fixture article', exact: true }), 'card', 'blog card')\n    await page.goto(config.origin + '/blog/' + config.postId, { waitUntil: 'networkidle' })\n    await checkImage(page.getByRole('img', { name: 'R2 fixture article', exact: true }), 'large', 'blog hero')\n  }\n  phase = 'admin-edit-upload'\n  const bootstrap = await page.evaluate(async () => { const result = await fetch('/fixture/bootstrap').then(r => r.json()); localStorage.setItem('token', result.token); return true })\n  assert.equal(bootstrap, true)\n  await page.goto(config.origin + '/admin/properties', { waitUntil: 'networkidle' })\n  await checkImage(page.getByRole('img', { name: 'R2 fixture home', exact: true }), 'thumbnail', 'admin table')\n  await page.getByRole('button', { name: 'Edit', exact: true }).click()\n  await checkImage(page.getByRole('img', { name: 'Property 1', exact: true }), 'thumbnail', 'existing edit preview')\n  await page.locator('#edit-property-images').setInputFiles(root + '/fixture-input.png')\n  await page.getByRole('img', { name: 'Preview', exact: true }).waitFor()\n  assert.match(await page.getByRole('img', { name: 'Preview', exact: true }).getAttribute('src'), /^(blob:|data:)/)\n  checks.push({ phase, name: 'local preview unchanged' })\n  const uploadResponse = page.waitForResponse(response => response.url().endsWith('/api/upload') && response.request().method() === 'POST')\n  await page.getByRole('button', { name: 'Save Changes', exact: true }).click()\n  assert.equal((await uploadResponse).status(), 200)\n  await page.getByRole('heading', { name: 'Edit Property', exact: true }).waitFor({ state: 'hidden' })\n  await page.reload({ waitUntil: 'networkidle' })\n  await page.getByRole('button', { name: 'Edit', exact: true }).click()\n  await checkImage(page.getByRole('img', { name: 'Property 3', exact: true }), 'thumbnail', 'new upload after fixture save/reload')\n  const state = await page.evaluate(async () => fetch('/fixture/events').then(r => r.json()))\n  assert.equal(state.images.length, 3)\n  assert.ok(state.images.every(url => url.endsWith('/large.webp')))\n  assert.equal(state.objectCount, 9)\n  assert.equal(state.events.filter(event => event.method === 'POST' && event.path === '/api/upload' && event.status === 200).length, 1)\n  assert.equal(requests.some(request => request.status >= 400), false)\n  assert.deepEqual(errors, [])\n  checks.push({ phase, name: 'canonical strings preserved through fixture PUT/reload; actual upload codecs/S3-double', objectCount: state.objectCount })\n  await fs.writeFile('browser-result.json', JSON.stringify({ passed: true, checks, requests, externalFixtures, errors, fixtures: ['catalogue/blog CRUD and auth profile are in-memory API fixtures; owner model is a method double', 'upload route, owner middleware, Sharp and React production bundle are real; S3 send is an in-memory object double', 'currency/fonts/remote stock images intercepted; no real provider/database access'] }, null, 2))\n  console.log(JSON.stringify({ passed: true, imageChecks: checks.length, responses: requests.length, errors: errors.length }))\n} catch (error) {\n  await page.screenshot({ path: 'browser-failure.png', fullPage: false }).catch(() => {})\n  await fs.writeFile('browser-failure.json', JSON.stringify({ passed: false, phase, error: error.message, checks, requests, errors }, null, 2))\n  throw error\n} finally {\n  await context.close()\n  await browser.close()\n}\n",
+      "executionRoot": "owned scratch directory containing clean backend/frontend snapshots; runtime uses a generated disposable TLS key/cert, not included"
+    }
+  },
+  "officialReferences": [
+    "https://developers.cloudflare.com/r2/examples/aws/aws-sdk-js-v3/",
+    "https://developers.cloudflare.com/r2/data-access/public-buckets/"
+  ],
+  "screenshots": {
+    "property-390.png": {
+      "sha256": "cb35db87d39a677729038be7ef8c31c6cd3bf47656fc6cf10f50bf19bf3d8b9e",
+      "reviewed": "parent visually inspected media rendering; solid green is an intentional generated fixture, not real inventory"
+    },
+    "property-1440.png": {
+      "sha256": "e5636c0002b3488c23a90af3792916fec9436784d4b615030fccd6e3039ccf0a",
+      "reviewed": "parent visually inspected media rendering; solid green is an intentional generated fixture, not real inventory"
+    }
+  },
+  "prefixRepair": {
+    "finding": "Public URL path prefix was absent from actual R2 object keys; original fixture incorrectly stripped that prefix.",
+    "fix": "The validated public base pathname prefixes every PUT/compensation key; canonical returned URL contains the prefix exactly once. Direct custom-domain routing requires no path-stripping rewrite.",
+    "repairTask": "deleg_7f8605c9",
+    "redThenGreen": true,
+    "focusedTestsPassed": 20,
+    "postRepairBackendTestsPassed": 185,
+    "postRepairBrowserScenarios": 19,
+    "postRepairBrowserResponses": 80,
+    "postRepairBrowserErrors": 0,
+    "affectedExecutablePaths": [
+      "src/services/imageStorage.js",
+      "test/image-storage.test.js",
+      "test/r2-loopback.test.js"
+    ],
+    "unchangedInputsRetainEvidence": "Frontend executable source, dependencies, build and all four audits unchanged; their successful source-bound checks remain valid. No unrelated historical Mongo/worker aggregate rerun.",
+    "nonblockingSuggestionDeferred": "Consider a total batch deadline; current per-request/encode timeouts and process-admission/operational limits remain documented."
+  }
+}
