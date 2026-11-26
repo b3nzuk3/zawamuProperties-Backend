@@ -4,6 +4,8 @@ This is the backend API for Zawamu Properties, built with Node.js, Express, and 
 
 ## R2 / WebP media checkpoint
 
+HEIC/HEIF phone-photo input is added by the subsequent local [HEIC upload checkpoint](docs/heic-uploads.md), using a pinned backend WASM decoder and the same stored WebP variants. It requires no system HEIF converter; preserve dependency license notices and follow its memory/deployment guidance. Local implementation is not deployment approval.
+
 Owner image uploads now use Cloudflare R2, with application-generated WebP thumbnail/card/large variants. Cloudinary's SDK and upload integration are removed. Read [`docs/r2-images.md`](docs/r2-images.md) for required backend R2 configuration, limits, native Sharp installation, unchanged URL persistence, verification and separate provider/legacy-asset retirement gates. Existing hosted images are not moved or deleted by removing the integration. This local checkpoint does not authorize push/deployment or account cancellation.
 
 ## Historical launch-readiness checkpoint

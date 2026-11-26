@@ -2,6 +2,7 @@ import test from 'node:test'
 import assert from 'node:assert/strict'
 import http from 'node:http'
 import { once } from 'node:events'
+import { readFile } from 'node:fs/promises'
 import express from 'express'
 import jwt from 'jsonwebtoken'
 import sharp from 'sharp'
@@ -56,9 +57,9 @@ test('real multipart → Sharp → AWS signed HTTP PUT → local object read-bac
   const api = await serve(app)
   t.after(api.close)
   const buffer = await sharp({ create: { width: 1800, height: 1200, channels: 4, background: '#18a85c80' } }).png().toBuffer()
-  async function upload() {
+  async function upload(input = buffer, type = 'image/png') {
     const form = new FormData()
-    form.append('images', new Blob([buffer], { type: 'image/png' }), 'phone.png')
+    form.append('images', new Blob([input], { type }), 'phone-upload')
     const response = await fetch(`http://127.0.0.1:${api.server.address().port}/api/upload`, { method: 'POST', headers: { Authorization: `Bearer ${jwt.sign({ userId: 'actor' }, process.env.JWT_SECRET)}` }, body: form })
     return { status: response.status, data: await response.json() }
   }
@@ -87,16 +88,29 @@ test('real multipart → Sharp → AWS signed HTTP PUT → local object read-bac
     assert.equal(metadata.hasAlpha, true)
     assert.equal(metadata.exif, undefined)
   }
+  const heic = await readFile(new URL('./fixtures/heic/intrinsic-rotation.heic', import.meta.url))
+  const heicResult = await upload(heic, 'image/heic')
+  assert.equal(heicResult.status, 200)
+  const heicPath = new URL(heicResult.data.urls[0]).pathname
+  for (const name of ['thumbnail', 'card', 'large']) {
+    const response = await fetch(`${endpoint}/fixture-images${heicPath.replace('large.webp', `${name}.webp`)}`)
+    assert.equal(response.status, 200)
+    const metadata = await sharp(Buffer.from(await response.arrayBuffer())).metadata()
+    assert.equal(metadata.format, 'webp')
+    assert.equal(metadata.width, 40)
+    assert.equal(metadata.height, 80)
+    assert.equal(metadata.exif, undefined)
+  }
   for (const request of received.filter(row => row.method === 'PUT')) {
     assert.equal(request.signed, true)
     assert.equal(request.mime, 'image/webp')
     assert.equal(request.cache, 'public, max-age=31536000, immutable')
   }
   const retainedKeys = [...objects.keys()]
-  assert.equal(retainedKeys.length, 3)
+  assert.equal(retainedKeys.length, 6)
   assert.ok(retainedKeys.every(key => key.startsWith('/fixture-images/assets/')))
   failCard = true
-  assert.equal((await upload()).status, 503)
+  assert.equal((await upload(heic, 'image/heic')).status, 503)
   assert.deepEqual([...objects.keys()], retainedKeys)
   const deletes = received.filter(row => row.method === 'DELETE')
   assert.equal(deletes.length, 2)

@@ -3,6 +3,7 @@ import assert from 'node:assert/strict'
 import express from 'express'
 import jwt from 'jsonwebtoken'
 import sharp from 'sharp'
+import { readFile } from 'node:fs/promises'
 import { S3Client } from '@aws-sdk/client-s3'
 import User from '../src/models/User.js'
 import { serve, stub, query } from './helpers/http.js'
@@ -55,6 +56,22 @@ test('anonymous and ordinary callers fail before malformed multipart parsing or 
   api.actor('ordinary@example.test')
   assert.equal((await api.upload('malformed', true, headers)).status, 403)
   assert.equal(api.calls.length, 0)
+})
+
+test('owner HEIC multipart is identified by bytes even with generic MIME/filename (S3 mock)', async t => {
+  const api = await setup(t)
+  const heic = await readFile(new URL('./fixtures/heic/intrinsic-rotation.heic', import.meta.url))
+  const result = await api.upload(multipart([heic], 'images', 'application/octet-stream'))
+  assert.equal(result.status, 200)
+  assert.equal(result.data.urls.length, 1)
+  assert.equal(api.calls.length, 3)
+  for (const command of api.calls) {
+    const metadata = await sharp(command.input.Body).metadata()
+    assert.equal(metadata.format, 'webp')
+    assert.equal(metadata.width, 40)
+    assert.equal(metadata.height, 80)
+    assert.equal(metadata.exif, undefined)
+  }
 })
 
 test('missing, excessive, wrong-field, oversized and malformed multipart requests return safe JSON', async t => {

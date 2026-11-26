@@ -23,6 +23,7 @@
     "express": "^4.19.2",
     "express-rate-limit": "8.7.5",
     "jsonwebtoken": "^9.0.2",
+    "libheif-js": "1.23.5",
     "mongoose": "^8.3.4",
     "multer": "^2.0.2",
     "nodemailer": "^10.6.1",

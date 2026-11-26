@@ -1,4 +1,5 @@
 import sharp from 'sharp'
+import { decodeHeic } from './heicDecoder.js'
 
 export const IMAGE_MAX_BYTES = 8 * 1024 * 1024
 export const IMAGE_MAX_PIXELS = 24_000_000
@@ -8,9 +9,9 @@ export const IMAGE_VARIANTS = Object.freeze({
   large: 1600,
 })
 
-const INVALID_IMAGE_MESSAGE = 'Image is invalid or unsupported'
+const INVALID_IMAGE_MESSAGE = 'Image is invalid or unsupported. Use a single JPEG, PNG, WebP, AVIF or HEIC/HEIF photo.'
 const IMAGE_TOO_LARGE_MESSAGE = 'Image exceeds the allowed limits'
-const ALLOWED_FORMATS = new Set(['jpeg', 'png', 'webp', 'avif'])
+const ALLOWED_FORMATS = new Set(['jpeg', 'png', 'webp', 'avif', 'heif'])
 const WEBP_OPTIONS = Object.freeze({ quality: 80, effort: 4 })
 const ENCODE_TIMEOUT_SECONDS = 15
 
@@ -24,6 +25,7 @@ export class ImageInputError extends Error {
 
 function getInputFormat(metadata) {
   if (metadata.format === 'heif' && metadata.compression === 'av1') return 'avif'
+  if (metadata.format === 'heif' && metadata.compression !== 'hevc') return null
   return metadata.format
 }
 
@@ -53,10 +55,12 @@ function hasCompleteContainer(buffer, format) {
     return false
   }
 
-  if (format === 'avif') {
+  if (format === 'avif' || format === 'heif') {
     let offset = 0
     while (offset + 8 <= buffer.length) {
       const boxLength = buffer.readUInt32BE(offset)
+      // HEIF image sequences are outside the single-photo upload contract.
+      if (format === 'heif' && buffer.toString('ascii', offset + 4, offset + 8) === 'moov') return false
       let headerLength = 8
       let boxSize = BigInt(boxLength)
       if (boxLength === 1) {
@@ -115,12 +119,25 @@ export async function optimizeImage(buffer) {
     throw new ImageInputError(IMAGE_TOO_LARGE_MESSAGE, 413)
   }
 
+  let input = buffer
+  let raw
+  if (format === 'heif') {
+    try {
+      const decoded = await decodeHeic(buffer, IMAGE_MAX_PIXELS)
+      input = decoded.buffer
+      raw = { width: decoded.width, height: decoded.height, channels: 4 }
+    } catch (error) {
+      throw safeImageError(error)
+    }
+  }
+
   const variants = []
   for (const [name, bound] of Object.entries(IMAGE_VARIANTS)) {
     try {
-      const { data, info } = await sharp(buffer, {
+      const { data, info } = await sharp(input, {
         failOn: 'warning',
         limitInputPixels: IMAGE_MAX_PIXELS,
+        ...(raw ? { raw } : {}),
       })
         .rotate()
         .resize({

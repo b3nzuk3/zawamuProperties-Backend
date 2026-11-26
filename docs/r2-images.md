@@ -8,7 +8,7 @@ New uploads use only R2. The Cloudinary SDK, configuration helper and upload pat
 
 ## Variants
 
-Every image gets a random UUID and three immutable object keys:
+Every image gets a random UUID and three immutable object keys. The subsequent [HEIC/HEIF checkpoint](heic-uploads.md) adds HEVC phone-photo input without changing these outputs; its evidence is separate from the historical R2 checkpoint.
 
 | Name | Maximum bounding box | Use |
 | --- | --- | --- |
@@ -16,7 +16,7 @@ Every image gets a random UUID and three immutable object keys:
 | card | 768 × 768 | Property/blog/saved-result cards |
 | large | 1600 × 1600 | Detail images |
 
-These are bounding boxes, **not square crops**. Preserve aspect ratio and do not enlarge small sources. All outputs are WebP at quality80/effort4, auto-rotated from EXIF before resizing. Metadata is stripped, including camera/GPS data. No unprocessed original is stored. JPEG, PNG, WebP and AVIF raster inputs are supported; SVG, GIF, animated/multipage and corrupt/oversized inputs are rejected after actual decoding rather than trusting MIME/filename. Maximum input8MiB, decoded24million pixels, per-output encode timeout15seconds. Install dependencies with npm/lockfile on the deployment platform; Sharp needs its compatible native optional packages. Do not copy a different platform's node_modules or omit optional native packages.
+These are bounding boxes, **not square crops**. Preserve aspect ratio and do not enlarge small sources. All outputs are WebP at quality80/effort4, auto-oriented before resizing. Metadata is stripped, including camera/GPS data. No unprocessed original is stored. JPEG, PNG, WebP, AVIF and single-image HEVC HEIC/HEIF raster inputs are supported; SVG, GIF, animated/multipage and corrupt/oversized inputs are rejected after actual decoding rather than trusting MIME/filename. Maximum input8MiB, decoded24million pixels, per-output encode timeout15seconds; HEIC adds a separate15second worker decode deadline. See the HEIC runbook for WASM/worker memory and orientation details. Install dependencies with npm/lockfile on the deployment platform; Sharp needs its compatible native optional packages. Do not copy a different platform's node_modules or omit optional native packages.
 
 ## Configuration
 
